@@ -1,22 +1,77 @@
 
 
 /* ==========================================================================
-   Author's custom styles
+   Styles for Main Page of chetaldrich.com
    ========================================================================== */
 
+@import url("fonts.css");
+@import url("fontello/css/fontello.css");
+@import url("font-awesome/css/font-awesome.min.css");
+
+/*banner*/
+
+
+.banner{
+  background: url(../img/banner.jpg);
+  margin: 0px !important;
+  min-width: 100% !important;
+  min-width: 100% !important;
+  padding-top: 60px;
+  padding-right: 30px;
+  padding-left: 30px;
+  min-height: 100vh;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1 {
+  font-size: 72px;
+  text-align: center;
+
+}
+
+span {
+  font-weight: bold;
+}
+
+.social li {
+   display: inline-block;
+   margin: 0 15px;
+   padding: 0;
+   font-size: 40px;
+}
+
+.social li a { color: #000; }
+.social li a:hover { color: #11ABB0; }
+
+/*.social {
+  text-align: center;
+}*/
+
+/*Images*/
+
+img {
+   max-width: 100%;
+   height: auto;
+}
 
 
 
 
+/* header social links */
+header .social {
+   margin: 24px 0;
+   padding: 0;
+   font-size: 30px;
+   text-shadow: 0px 1px 2px rgba(0, 0, 0, .8);
+}
+header .social li {
+   display: inline-block;
+   margin: 0 15px;
+   padding: 0;
+}
 
-
-
-
-
-
-
-
-
-
-
-
+header .social li a { color: #fff; }
+header .social li a:hover { color: #11ABB0; }
