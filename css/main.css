@@ -8,17 +8,22 @@
 @import url("fontello/css/fontello.css");
 @import url("font-awesome/css/font-awesome.min.css");
 
+/*All Page Effects*/
+
+
+
 /*banner*/
 
+.banner h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
+}
 
 .banner{
   background: url(../img/banner.jpg);
-  margin: 0px !important;
-  min-width: 100% !important;
-  min-width: 100% !important;
   padding-top: 60px;
   padding-right: 30px;
   padding-left: 30px;
+  padding-bottom: 30px;
   min-height: 100vh;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -26,13 +31,17 @@
   background-size: cover;
 }
 
-h1 {
+.banner h1 {
   font-size: 72px;
   text-align: center;
-
+  color: white;
 }
 
-span {
+.banner h3 {
+  color: white;
+}
+
+.banner span {
   font-weight: bold;
 }
 
@@ -43,12 +52,68 @@ span {
    font-size: 40px;
 }
 
-.social li a { color: #000; }
+.social li a { color: #fff; }
 .social li a:hover { color: #11ABB0; }
 
-/*.social {
+.social {
   text-align: center;
-}*/
+}
+
+/* About */
+
+.about h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
+  color: white;
+  font-size: 22px
+  margin-bottom: 12px;
+}
+
+.about p {
+  color: #555;
+  font-size: 15px;
+}
+
+.about {
+   background: #2B2B2B;
+   padding-top: 96px;
+   padding-bottom: 66px;
+   overflow: hidden;
+}
+
+.about .profpic {
+   position: relative;
+   width: 170px;
+   height: 170px;
+   border-radius: 100%;
+}
+
+.about .downloadbutton {
+  width: 100%;
+  text-align: center;
+  background: #555;
+  display: inline-block;
+  text-decoration: none;
+  letter-spacing: 0;
+  color: #fff;
+  padding: 12px 20px;
+  margin-bottom: 18px;
+  border: none;
+  cursor: pointer;
+  height: auto;
+
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  -ms-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+
+  border-radius: 3px;
+}
+
+.downloadbutton:hover{
+   background: #fff;
+   color: #444;
+}
 
 /*Images*/
 
