@@ -1,0 +1,14 @@
+@media only screen and (max-width: 767px) {
+  .about .profile {
+    display: none;
+  }
+  .about .profpic {
+    display: none;
+  }
+  .about .download .button {
+     width: 100%;
+     text-align: center;
+     padding: 15px 20px;
+  }
+  
+}
