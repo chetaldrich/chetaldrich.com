@@ -115,13 +115,32 @@
    color: #444;
 }
 
+/*Education, Skills*/
+
+.education {
+   background: white;
+   padding-top: 96px;
+   padding-bottom: 66px;
+   overflow: hidden;
+}
+
+.education h2 {
+  color: black;
+  font-size: 20px;
+}
+
+.education h3 {
+  color: black;
+  border-bottom: 5px solid #1E2850;
+  display: inline-block;
+}
+
 /*Images*/
 
 img {
    max-width: 100%;
    height: auto;
 }
-
 
 
 
