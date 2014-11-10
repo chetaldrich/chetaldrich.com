@@ -15,7 +15,7 @@
 /*banner*/
 
 .banner h1, h2, h3, h4, h5, h6 {
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
+
 }
 
 .banner{
@@ -35,10 +35,12 @@
   font-size: 72px;
   text-align: center;
   color: white;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
 }
 
 .banner h3 {
   color: white;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
 }
 
 .banner span {
@@ -62,7 +64,7 @@
 /* About */
 
 .about h1, h2, h3, h4, h5, h6 {
-  text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
+
   color: white;
   font-size: 22px
   margin-bottom: 12px;
@@ -117,6 +119,7 @@
 
 /*Education, Skills*/
 
+
 .education {
    background: white;
    padding-top: 96px;
@@ -133,6 +136,15 @@
   color: black;
   border-bottom: 5px solid #1E2850;
   display: inline-block;
+}
+
+.education h4 {
+  color: #555;
+  font-style: italic;
+}
+
+.education p {
+  color: #555;
 }
 
 /*Images*/
