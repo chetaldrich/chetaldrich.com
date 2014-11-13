@@ -165,7 +165,7 @@ body {
   color: #555;
 }
 
-/*skillbar*/
+/* Skills */
 
 .skills h3 {
   color: black;
@@ -173,7 +173,7 @@ body {
   display: inline-block;
 }
 
-/*skillbar Bars*/
+/* Skill Bars */
 
 .bars {
   width: 95%;
@@ -268,19 +268,39 @@ body {
   text-align: center;
 }
 
+/* Contact */
 
-/* header social links */
-header .social {
-   margin: 24px 0;
-   padding: 0;
-   font-size: 30px;
-   text-shadow: 0px 1px 2px rgba(0, 0, 0, .8);
-}
-header .social li {
-   display: inline-block;
-   margin: 0 15px;
-   padding: 0;
+#contact {
+   background: #2B2B2B;
+   padding-top: 46px;
+   padding-bottom: 66px;
+   overflow: hidden;
 }
 
-header .social li a { color: #fff; }
-header .social li a:hover { color: #11ABB0; }
+#contact #mailtext {
+  padding-top: 30px;
+  font-size: 20px;
+  color: #666;
+}
+
+#contact #link {
+  font-size: 20px;
+  color: #ccc;
+}
+
+#contact #link:hover {
+  color: #888;
+}
+
+#contact a:hover {
+  text-decoration: none;
+}
+
+.mail a {
+  color: white;
+  font-size: 100px;
+}
+
+.mail a:hover {
+  color: #aaa;
+}
