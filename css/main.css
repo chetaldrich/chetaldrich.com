@@ -131,7 +131,7 @@ body {
    color: #444;
 }
 
-/*education-work, Skills*/
+/*education-work*/
 
 
 .experience {
@@ -165,7 +165,15 @@ body {
   color: #555;
 }
 
-/*Skills Bars*/
+/*skillbar*/
+
+.skills h3 {
+  color: black;
+  border-bottom: 5px solid #1E2850;
+  display: inline-block;
+}
+
+/*skillbar Bars*/
 
 .bars {
   width: 95%;
@@ -173,7 +181,7 @@ body {
   padding-top: 30px;
   text-align: left;
 }
-.bars .skills {
+.bars .skillbar {
   margin-top: 36px;
   list-style: none;
   margin-left: -40px;
