@@ -140,6 +140,8 @@ body {
    background: white;
    padding-top: 96px;
    padding-bottom: 66px;
+   padding-right: 30px;
+   padding-left: 30px;
    overflow: hidden;
 }
 
@@ -254,6 +256,8 @@ body {
    background: #eee;
    padding-top: 30px;
    padding-bottom: 66px;
+   padding-right: 30px;
+   padding-left: 30px;
    overflow: hidden;
 }
 
@@ -272,29 +276,31 @@ body {
 
 /* Contact */
 
-#contact {
+.contact {
    background: #2B2B2B;
    padding-top: 46px;
    padding-bottom: 66px;
+   padding-right: 30px;
+   padding-left: 30px;
    overflow: hidden;
 }
 
-#contact #mailtext {
+.contact #mailtext {
   padding-top: 30px;
   font-size: 20px;
   color: #666;
 }
 
-#contact #link {
+.contact #link {
   font-size: 20px;
   color: #ccc;
 }
 
-#contact #link:hover {
+.contact #link:hover {
   color: #888;
 }
 
-#contact a:hover {
+.contact a:hover {
   text-decoration: none;
 }
 
