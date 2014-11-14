@@ -113,7 +113,7 @@ body {
    height: auto;
 }
 
-.about .downloadbutton {
+.downloadbutton {
   width: 100%;
   text-align: center;
   background: #555;
@@ -146,8 +146,6 @@ body {
 }
 
 /*education-work*/
-
-
 
 .experience {
    background: white;
@@ -325,4 +323,9 @@ body {
 
 .mail a:hover {
   color: #aaa;
+}
+
+#cpright {
+  color: white;
+  text-align: center;
 }
