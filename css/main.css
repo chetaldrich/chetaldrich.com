@@ -22,16 +22,16 @@ body {
   text-align: center !important;
 }
 
-/*Navigation*/
-.navelements {
-  list-style: none;
+/*Navigation Padding*/
+
+#work {
+  padding-top: 50px;
 }
 
-.navelements a {
-  color: white;
-  text-decoration: none;
-  padding-left: -10px;
+#skills {
+  padding-top: 50px;
 }
+
 
 /*Banner*/
 
@@ -136,7 +136,7 @@ body {
   border-radius: 3px;
 }
 
-.contact {
+.contactdetails {
   padding-bottom: 20px;
 }
 
@@ -146,6 +146,7 @@ body {
 }
 
 /*education-work*/
+
 
 
 .experience {
@@ -182,6 +183,7 @@ body {
 }
 
 /* Skills */
+
 
 .skills h3 {
   color: black;
