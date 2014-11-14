@@ -32,6 +32,9 @@ body {
   padding-top: 50px;
 }
 
+.navbar-brand {
+  padding-top: 5px !important;
+}
 
 /*Banner*/
 
@@ -151,8 +154,6 @@ body {
    background: white;
    padding-top: 96px;
    padding-bottom: 66px;
-   padding-right: 30px;
-   padding-left: 30px;
    overflow: hidden;
 }
 
@@ -268,8 +269,6 @@ body {
    background: #eee;
    padding-top: 30px;
    padding-bottom: 66px;
-   padding-right: 30px;
-   padding-left: 30px;
    overflow: hidden;
 }
 
