@@ -93,7 +93,7 @@ body {
 }
 
 .about p {
-  color: #555;
+  color: #999;
   font-size: 15px;
 }
 
@@ -153,7 +153,7 @@ body {
 .experience {
    background: white;
    padding-top: 96px;
-   padding-bottom: 66px;
+   padding-bottom: 26px;
    overflow: hidden;
 }
 
@@ -190,6 +190,16 @@ body {
   display: inline-block;
 }
 
+.info {
+  position: relative;
+  background: white !important;
+  margin-bottom: 70px !important;
+  height: auto !important;
+  border-radius: 5px;
+
+}
+
+
 /* Skill Bars */
 
 .bars {
@@ -202,14 +212,21 @@ body {
   margin-top: 36px;
   list-style: none;
   margin-left: -40px;
+  padding-top: 20px;
 }
 .bars li {
   position: relative;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   background: #ccc;
   height: 42px;
   border-radius: 5px;
 }
+
+.bars p {
+  font-size: 15px;
+  padding-bottom: 20px;
+}
+
 .bars li em {
   font-size: 20px;
   color: #313131;
@@ -234,22 +251,21 @@ body {
 }
 
 .html {
-    width: 70%;
+    width: 80%;
     -moz-animation: html5 2s ease;
     -webkit-animation: html5 2s ease;
 }
 .css {
-    width: 60%;
+    width: 70%;
     -moz-animation: css 2s ease;
     -webkit-animation: css 2s ease;
 }
 
 .javascript {
-    width: 50%;
+    width: 60%;
     -moz-animation: photoshop 2s ease;
     -webkit-animation: photoshop 2s ease;
 }
-
 
 .java {
     width: 80%;
@@ -299,7 +315,7 @@ body {
 .contact #mailtext {
   padding-top: 30px;
   font-size: 20px;
-  color: #666;
+  color: #999;
 }
 
 .contact #link {
@@ -308,7 +324,7 @@ body {
 }
 
 .contact #link:hover {
-  color: #888;
+  color: #999;
 }
 
 .contact a:hover {
