@@ -39,12 +39,11 @@ body {
 /*Banner*/
 
 .banner{
-  background: url(../img/banner.jpg);
+  background-image: url(../img/banner.jpg);
   padding-top: 60px;
   padding-right: 30px;
   padding-left: 30px;
-  padding-bottom: 30px;
-  min-height: 100vh;
+  padding-bottom: 400px;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -108,7 +107,6 @@ body {
    padding-right: 30px;
    padding-left: 30px;
    padding-bottom: 30px;
-   min-height: 50vh;
    overflow: hidden;
 }
 
