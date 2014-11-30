@@ -192,36 +192,64 @@ for the campaign.</li>
           <div class = "col-md-3 col-xs-12 centered skills">
             <h3>Skills</h3>
           </div>
-          <div class = "col-md-9 col-xs-12">
-            <div class = "bars">
-              <ul class = "skillbar">
-                <li><span class="bar-expand html"></span><em><img src = "img/html.png"/> HTML5</em> </li>
-                <li><span class="bar-expand css"></span><em><img src = "img/css.png"/> CSS3</em></li>
-                <li class = "info"><p>Recently I've spent some time developing my skills in HTML and CSS for front-end development and responsive web design.
-                 This website is one of the products of this work, which also functions well on mobile! Additionally, I have signficant experience with Bootstrap, a front-end
-                 CSS and JavaScript framework. </p></li>
+          <div class = "skillbars">
 
-                <li><span class="bar-expand javascript"></span><em><img src = "img/javascript.png"/> JavaScript</em></li>
-                <li class = "info"><p>I've also spent some time learning JavaScript in the context of web development, and
-                my largest venture using JavaScript so far has been developing SharePlay with a team of two others at a hackathon
-                at the Georgia Institute of Technology. This particular project used the Twilio API and Beats Music API to play
-                music on your computer by text from your cell phone as well as do concurrent playlist management using Meteor.js.
-                <br><br> Additionally, I have experience using jQuery for web development, which can be seen on a few of my projects
-                viewable on <a href="https://github.com/chetaldrich">GitHub</a>. <br><br>
-                I'm currently hoping to explore other full stack technologies, such as the MEAN stack, and I am working on
-                learning AngularJS.</p></li>
 
-                <li><span class="bar-expand java"></span><em><img src = "img/java.png"/> Java</em></li>
-                <li class = "info"><p>I have significant experience in Java stemming from courses I have taken at Carleton, specifically
-                Data Structures and Software Design, where Java has been used extensively. I am currently working on producing an Asteroids-esque
-                game using the JavaFX framework.</p></li>
-                <li><span class="bar-expand python"></span><em><img src = "img/python.png"/> Python</em></li>
-                <li class = "info"><p>Finally, I have experience using Python, mostly in the context of web applications. A good example is the CarMarketplace,
-                a Python CGI based web application that uses PostgreSQL to allow easy access to vehicle information for customers looking to purchase a vehicle
-                from their local car dealer, viewable on <a href="https://github.com/chetaldrich">GitHub</a>. <br><br>
+            <div class = "col-md-9 col-xs-12">
+              <div class="skillbar clearfix " data-percent="70%">
+                <div class="skillbar-title" style="background: #2980b9;"><span><img src="img/html.png" alt="" /> HTML5</span></div>
+                <div class="skillbar-bar" style="background: #3498db;"></div>
+                <div class="skill-bar-percent">70%</div>
+              </div> <!-- End Skill Bar -->
 
-                I also have experience with Flask and Django, two Python web frameworks, and am hoping to learn more about these soon.</p></li>
-              </ul>
+              <div class="skillbar clearfix " data-percent="60%">
+                <div class="skillbar-title" style="background: #2c3e50;"><span><img src="img/css.png" alt="" /> CSS3</span></div>
+                <div class="skillbar-bar" style="background: #2c3e50;"></div>
+                <div class="skill-bar-percent">60%</div>
+              </div> <!-- End Skill Bar -->
+
+              <p>Recently I've spent some time developing my skills in HTML and CSS for front-end development and responsive web design.
+                This website is one of the products of this work, which also functions well on mobile! Additionally, I have signficant experience with Bootstrap, a front-end
+                CSS and JavaScript framework. </p>
+
+                <div class="skillbar clearfix " data-percent="70%">
+                  <div class="skillbar-title" style="background: #333333;"><span><img src="img/javascript.png" alt="" /> JavaScript</span></div>
+                  <div class="skillbar-bar" style="background: #525252;"></div>
+                  <div class="skill-bar-percent">70%</div>
+                </div> <!-- End Skill Bar -->
+
+                <p>I've also spent some time learning JavaScript in the context of web development, and
+                  my largest venture using JavaScript so far has been developing SharePlay with a team of two others at a hackathon
+                  at the Georgia Institute of Technology. This particular project used the Twilio API and Beats Music API to play
+                  music on your computer by text from your cell phone as well as do concurrent playlist management using Meteor.js.
+                  <br><br> Additionally, I have experience using jQuery for web development, which can be seen on a few of my projects
+                  viewable on <a href="https://github.com/chetaldrich">GitHub</a> and also here! Try refreshing the page!. <br><br>
+                  I'm currently hoping to explore other full stack technologies, such as the MEAN stack, and I am working on
+                  learning AngularJS.</p>
+
+                <div class="skillbar clearfix " data-percent="80%">
+                  <div class="skillbar-title" style="background: #27ae60;"><span><img src="img/java.png" alt="" /> Java</span></div>
+                  <div class="skillbar-bar" style="background: #2ecc71;"></div>
+                  <div class="skill-bar-percent">80%</div>
+                </div> <!-- End Skill Bar -->
+
+                <p>I have significant experience in Java stemming from courses I have taken at Carleton, specifically
+                  Data Structures and Software Design, where Java has been used extensively. Recently, I produced an Asteroids-esque
+                  game using the JavaFX framework, the code for which is viewable <a href="https://github.com/chetaldrich/Asteroids">here</a>.</p>
+
+                <div class="skillbar clearfix " data-percent="80%">
+                  <div class="skillbar-title" style="background: #124e8c;"><span><img src="img/python.png" alt="" /> Python</span></div>
+                  <div class="skillbar-bar" style="background: #4288d0;"></div>
+                  <div class="skill-bar-percent">80%</div>
+                </div> <!-- End Skill Bar -->
+
+                <p>Finally, I have experience using Python, mostly in the context of web applications. A good example is the CarMarketplace,
+                  a Python CGI based web application that uses PostgreSQL to allow easy access to vehicle information for customers looking to purchase a vehicle
+                  from their local car dealer, viewable on <a href="https://github.com/chetaldrich">GitHub</a>. <br><br>
+
+                  I also have experience with Flask and Django, two Python web frameworks, and am hoping to learn more about these soon.</p>
+
+          </div>
             </div>
           </div>
         </div> <!-- /row -->
@@ -288,6 +316,9 @@ for the campaign.</li>
         <script src="js/packages/bootstrap.min.js"></script>
 
         <script src="js/main.js"></script>
+
+        <script src ="js/skillbar.js"></script>
+
 
     </body>
 </html>
