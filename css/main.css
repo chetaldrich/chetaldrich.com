@@ -203,11 +203,6 @@ body {
 
 /* Skill Bars */
 
-/*p{
-  color:#525252;
-  font-size:12px;
-}*/
-
 .skillbars img {
   height: 1.5em;
   width: 1.5em;
@@ -290,80 +285,6 @@ body {
   color:#ffffff;
   color:rgba(0, 0, 0, 0.4);
 }
-
-/*.bars {
-  width: 95%;
-  float: left;
-  padding-top: 30px;
-  text-align: left;
-}
-.bars .skillbar {
-  margin-top: 36px;
-  list-style: none;
-  margin-left: -40px;
-  padding-top: 20px;
-}
-.bars li {
-  position: relative;
-  margin-bottom: 40px;
-  background: #ccc;
-  height: 42px;
-  border-radius: 5px;
-}
-
-.bars p {
-  font-size: 15px;
-  padding-bottom: 20px;
-}
-
-.bars li em {
-  font-size: 20px;
-  color: #313131;
-  font-style: normal;
-  position: relative;
-  top: -36px;
-}
-
-.bar-expand {
-   position: absolute;
-   left: 0;
-   top: 0;
-   margin: 0;
-   background: #313131;
-   display: inline-block;
-   height: 42px;
-   line-height: 42px;
-   border-radius: 3px 0 0 3px;
-}
-
-.html {
-    width: 80%;
-    -moz-animation: html5 2s ease;
-    -webkit-animation: html5 2s ease;
-}
-.css {
-    width: 70%;
-    -moz-animation: css 2s ease;
-    -webkit-animation: css 2s ease;
-}
-
-.javascript {
-    width: 60%;
-    -moz-animation: photoshop 2s ease;
-    -webkit-animation: photoshop 2s ease;
-}
-
-.java {
-    width: 80%;
-    -moz-animation: photoshop 2s ease;
-    -webkit-animation: photoshop 2s ease;
-}
-
-.python {
-    width: 80%;
-    -moz-animation: photoshop 2s ease;
-    -webkit-animation: photoshop 2s ease;
-}*/
 
 /*Projects*/
 
