@@ -140,10 +140,6 @@ body {
   border-radius: 3px;
 }
 
-.contactdetails {
-  padding-bottom: 20px;
-}
-
 .downloadbutton:hover{
    background: #fff;
    color: #444;
