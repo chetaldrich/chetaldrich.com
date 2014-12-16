@@ -41,11 +41,8 @@ body {
   padding-top: 60px;
   padding-right: 30px;
   padding-left: 30px;
-  padding-bottom: 400px;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
+  min-height: 100vh;
 }
 
 .banner h1 {
@@ -176,6 +173,10 @@ body {
 
 .education-work li {
   color: #555;
+}
+
+.work-content {
+  margin-top: 10px;
 }
 
 /* Skills */
