@@ -150,6 +150,12 @@ body {
   font-size: 15px;
 }
 
+.about #frog {
+  color: #12c031;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 .about {
    background: #2B2B2B;
    padding-top: 60px;
@@ -194,6 +200,7 @@ body {
 .downloadbutton:hover{
    background: #fff;
    color: #444;
+   text-decoration: none;
 }
 
 /*education-work*/
