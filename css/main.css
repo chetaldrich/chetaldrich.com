@@ -304,13 +304,22 @@ body {
   display: block;
   margin: auto;
   border-radius: 5px;
+  position: relative;
 }
+
+
 
 .projects h2 {
   color: black;
   padding-top: 0px;
   padding-bottom: 20px;
   text-align: center;
+}
+
+/*Projects overlay*/
+
+.projects a:hover {
+  cursor: pointer;
 }
 
 /*Modals*/
@@ -332,6 +341,10 @@ body {
 .modal-body {
   background-color: #222;
   border: 0px;
+}
+
+.modal-body p {
+  color: #eee;
 }
 
 /*Mail Modal*/
