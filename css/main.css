@@ -34,7 +34,6 @@ body {
 }
 
 
-
 /*Banner*/
 
 .banner{
@@ -157,6 +156,10 @@ body {
    padding-top: 96px;
    padding-bottom: 26px;
    overflow: hidden;
+}
+
+.logo {
+  margin-top: 20px;
 }
 
 .education-work h2 {
