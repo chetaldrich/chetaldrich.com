@@ -160,11 +160,8 @@ body {
 
 .logo {
   margin-top: 20px;
-}
-
-.msu {
-  text-align: center;
-  margin-left: 8px;
+  display: block;
+  margin: 0 auto;
 }
 
 .education-work h2 {
@@ -313,8 +310,8 @@ body {
   margin: auto;
   border-radius: 5px;
   position: relative;
+  margin-bottom: 10px;
 }
-
 
 
 .projects h2 {
