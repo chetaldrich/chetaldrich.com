@@ -97,9 +97,8 @@ body {
 }
 
 .about #frog {
-  color: #12c031;
-  font-weight: bold;
   text-decoration: none;
+  color: #aaa;
 }
 
 .about {
