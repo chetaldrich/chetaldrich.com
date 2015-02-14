@@ -33,10 +33,6 @@ body {
   padding-top: 5px !important;
 }
 
-#projects2 {
-  margin-top: 40px;
-}
-
 
 /*Banner*/
 
@@ -100,9 +96,24 @@ body {
   font-size: 15px;
 }
 
-.about #frog {
+.pandora {
   text-decoration: none;
-  color: #aaa;
+  color: rgb(49,98,143);
+}
+
+.pandora:hover {
+  text-decoration:none;
+  color: rgb(49,98,143);
+}
+
+.frog {
+  text-decoration: none;
+  color: green;
+}
+
+.frog:hover{
+  text-decoration: none;
+  color: green;
 }
 
 .about {
@@ -327,6 +338,10 @@ body {
   padding-top: 0px;
   padding-bottom: 20px;
   text-align: center;
+}
+
+#projects2 {
+  margin-top: 40px;
 }
 
 /*Projects overlay*/
