@@ -1,0 +1,138 @@
+#projects.projects
+  .container
+    .row
+      %h2 Check out some of my work!
+    .row
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#dunmo", "data-toggle" => "modal"}
+          %img{:alt => "Dunmo", :height => "200", :src => "images/dunmo.png", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#chetaldrich", "data-toggle" => "modal"}
+          %img{:alt => "This website!", :height => "200", :src => "images/projectca.png", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#asktarget", "data-toggle" => "modal"}
+          %img{:alt => "Ask Target", :height => "200", :src => "images/asktarget.png", :width => "200"}/
+      .row
+        #projects2.col-md-6.col-xs-12
+          %a{"data-target" => "#shareplay", "data-toggle" => "modal"}
+            %img{:alt => "SharePlay", :height => "200", :src => "images/shareplay.jpg", :width => "200"}/
+        #projects2.col-md-6.col-xs-12
+          %a{"data-target" => "#sensesf", "data-toggle" => "modal"}
+            %img{:alt => "SenseSF", :height => "200", :src => "images/sensesf.png", :width => "200"}/
+
+/ Modals for Projects
+/ Shareplay Modal
+#shareplay.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h2.modal-title SharePlay
+      .modal-body
+        %a{:href => "http://shareplay.me"}
+          %img.inmodal{:alt => "screenshot", :src => "images/shareplayshot.png"}/
+        %p
+          A concurrently edited playlist manager and music player that users can text
+          message to add to the queue. Implemented with Meteor.js, Bootstrap, Beats
+          Music API and Twilio in 36 hours at HackGT, a hackathon at the Georgia Institute
+          of Technology.
+          %br/
+          %br/
+          A demo can be seen
+          %a{:href => "http://shareplay.me"} here
+          or you can take a look at the code
+          = succeed "." do
+            %a{:href => "https://github.com/Kenadia/SharePlay"} here
+      .modal-footer
+/ chetaldrich.com Modal
+#chetaldrich.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title chetaldrich.com
+      .modal-body
+        %img.inmodal{:alt => "chetaldrich.com", :src => "images/personalsite.png"}/
+        %p
+          %br/
+          This website became a pet project beginning in November of 2014, and I finished with the first site in about two weeks.
+          I tinker with it now and then, particularly if I want to try learning how to do something applicable to web development.
+          Right now that means building a blog for the website with Middleman.
+          %br/
+          %br/
+          Go ahead and take a look at the current development version of the site
+          = succeed "." do
+            %a{:href => "https://github.com/chetaldrich/chetaldrich.com"} here
+      .modal-footer
+/ askTarget Modal
+#asktarget.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title Ask Target
+      .modal-body
+        %img.inmodal{:alt => "AskTarget", :src => "images/asktargetflow.png"}/
+        %p
+          %br/
+          This help center-like web application was designed to provide a quick,
+          simple interface by which customers could quickly ask questions of staff
+          via text and get them answered quickly.
+          %br/
+          %br/
+          The interface uses a combination of the Flask web framework and Twilio API,
+          and was built in 24 hours for UHack at the University of Minnesota.
+          The project reached the second round of judging, which comprised of the
+          top twenty entries at the hackathon.
+          %br/
+          %br/
+          You can take a look at the project
+          = succeed "." do
+            %a{:href => "https://github.com/chetaldrich/targethelp"} here
+      .modal-footer
+/ senseSF Modal
+#sensesf.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title SenseSF
+      .modal-body
+        %video.inmodal{:autoplay => "", :controls => "", :poster => "sensesf.png", :src => "images/final.mp4"}
+          You are using an
+          %strong outdated
+          browser. Please
+          %a{:href => "http://browsehappy.com/"} upgrade your browser
+          to improve your experience.
+        %p
+          %br/
+          A web application built using d3.js designed to provide simple data visualizations
+          for temperature, humidity, sound levels, and ambient light sensor data in the
+          frog San Francisco office. I constructed sensors and used five Raspberry Pi
+          devices to provide JSON data used for the visualizations.
+      .modal-footer
+/ Dunmo Modal
+#dunmo.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title Dunmo
+      .modal-body
+        %img.inmodal{:alt => "Dunmo", :src => "images/dunmomock.png"}/
+        %p
+          %br/
+          A web application built using Meteor at MHacks V which intelligently decides how to
+          schedule tasks that you need done during the day, as well as making appropriate divisions
+          for large tasks.
+      .modal-footer
