@@ -1,25 +1,6 @@
-.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
-  .container
-    .navbar-header
-    
-      %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
-        %span.sr-only Toggle navigation
-        %span.icon-bar
-        %span.icon-bar
-        %span.icon-bar
-      %a.navbar-brand{:href => "#banner"}= image_tag "calogo.png", :alt => "website banner"
-
-    .navbar-collapse.collapse
-      %ul.nav.navbar-nav.navbar-right
-        %li
-          %a{:href => "#about"} About
-        %li
-          %a{:href => "#education"} Education
-        %li
-          %a{:href => "#work"} Work Experience
-        %li
-          %a{:href => "#skills"} Skills
-        %li
-          %a{:href => "#projects"} Projects
-        %li
-          %a{:href => "#contact"} Contact
+.mainnav.navbar-fixed-top{:role => "navigation"}
+  .navigation.center.container
+    %a= link_to image_tag("calogo.png"), "/"
+    %a= link_to "Projects", "projects"
+    %a= link_to "Blog", "blog"
+    %a= link_to "Email", "mailto:chetaldrich@gmail.com"
