@@ -1,5 +1,5 @@
 ---
-title: Making a Middleman blog
+title: Making a Middleman Blog
 date: 2015-02-24 20:58 UTC
 tags:
 ---
