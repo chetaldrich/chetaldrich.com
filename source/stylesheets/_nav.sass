@@ -1,0 +1,46 @@
+.nav
+  a
+    font-size: 15px
+    color: white
+
+    &:hover
+      color: #1E2850
+      border-bottom: 5px solid #1E2850
+      background-color: transparent !important
+
+.fix-top
+  top: 20px
+  position: relative
+  z-index: 1
+
+.masthead-brand
+  font-size: 40px
+  display: inline-block
+  position: absolute
+  margin-top: 0px
+  margin-bottom: 10px
+  &:hover
+    cursor: pointer
+
+.masthead-nav
+  display: inline-block
+  position: absolute
+  right: 5px
+  top: 5px
+
+.masthead-nav >
+  li
+    display: inline-block
+    + li
+      margin-left: 20px
+    > a
+      padding-right: 0
+      padding-left: 0
+      font-size: 15px
+      color: #fff
+  .active > a
+    color: #fff
+    border-bottom-color: #fff
+    &:hover, &:focus
+      color: #fff
+      border-bottom-color: #fff

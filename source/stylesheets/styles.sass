@@ -2,6 +2,7 @@
 //= require ../../bower_components/fontawesome/scss/font-awesome.scss
 
 @import blog
+@import nav
 @import banner
 @import about
 @import education
@@ -10,8 +11,12 @@
 @import projects
 @import contact
 
+
+@font-face
+  font-family: remachine_script
+  src: url('/images/remachine_script.ttf')
+
 body
-  padding-top: 50px
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
 
 .centered
@@ -20,5 +25,6 @@ body
   margin-right: auto !important
   text-align: center !important
 
-.navbar-brand
-  padding-top: 5px !important
+.remachine
+  font-family: remachine_script
+  color: white
