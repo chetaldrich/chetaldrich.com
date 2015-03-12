@@ -1,6 +1,7 @@
 //= require ../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss
 //= require ../../bower_components/fontawesome/scss/font-awesome.scss
 
+@import post
 @import blog
 @import nav
 @import banner
@@ -27,4 +28,10 @@ body
 
 .remachine
   font-family: remachine_script
-  color: white
+
+.mainlogo
+  @extend .remachine
+  font-size: 40px
+  &:hover
+    cursor: pointer
+    text-decoration: none
