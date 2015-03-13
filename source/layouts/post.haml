@@ -6,7 +6,7 @@
         %h1= current_article.title || "" unless current_article.nil?
         %hr
 
-      %article= yield
+      %article~ yield
 
       .postfooter
         %hr

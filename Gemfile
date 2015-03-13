@@ -8,6 +8,6 @@ gem 'middleman-bootstrap-navbar'
 gem "bootstrap-sass"
 gem "jquery-middleman"
 gem "middleman-syntax"
-
+gem "redcarpet"
 # For feed.xml.builder
 gem "builder", "~> 3.0"
