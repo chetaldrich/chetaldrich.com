@@ -1,9 +1,13 @@
 = wrap_layout :layout do
-  .post
-    .post-brand
-      %a{:href => "/"} chetaldrich
-      %h1= current_article.title || "" unless current_article.nil?
-    .postcontent
+  .postwrapper
+    .post
+      .post-brand
+        %a{:href => "/"} chetaldrich
+        %h1= current_article.title || "" unless current_article.nil?
+        %hr
+
       %article= yield
-      %hr
-      %a{:href => "/blog"} &larr; More Posts
+
+      .postfooter
+        %hr
+        %a{:href => "/blog"} &larr; More Posts
