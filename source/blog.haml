@@ -18,7 +18,7 @@
           = link_to article.title, article
         %span Chet Aldrich &middot;
         %span= article.date.strftime('%b %e %Y')
-        %span= truncate_words(article.body, :length => 25)
+        %p= article.data.summary
         %hr
 - if paginate
   - if next_page

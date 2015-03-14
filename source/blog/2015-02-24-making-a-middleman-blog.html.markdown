@@ -2,6 +2,7 @@
 title: Making a Middleman Blog
 date: 2015-02-24 20:58 UTC
 tags:
+summary: A log of some of the development details for this site. 
 ---
 Stuff stuff stuff
 Stuff stuff stuff
