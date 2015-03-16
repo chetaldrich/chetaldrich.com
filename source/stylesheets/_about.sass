@@ -1,32 +1,16 @@
 .about
-  h1, h2, h3, h4, h5, h6
-    color: white
-    font-size: 22px
-  p
-    color: #999
-    font-size: 15px
-
-.pandora
-  text-decoration: none
-  color: rgb(49, 98, 143)
-  &:hover
-    text-decoration: none
-    color: rgb(49, 98, 143)
-
-.frog
-  text-decoration: none
-  color: green
-  &:hover
-    text-decoration: none
-    color: green
-
-.about
-  background: #2B2B2B
+  background: #eee
   padding-top: 60px
   padding-right: 30px
   padding-left: 30px
   padding-bottom: 30px
   overflow: hidden
+  h1, h2, h3, h4, h5, h6
+    color: black
+    font-size: 22px
+  p
+    color: black
+    font-size: 15px
   .profpic
     position: relative
     width: 170px
@@ -35,10 +19,24 @@
     max-width: 100%
     height: auto
 
+.pandora
+  text-decoration: none
+  color: $accent1
+  &:hover
+    text-decoration: none
+    color: $focusaccent1
+
+.frog
+  text-decoration: none
+  color: $frog
+  &:hover
+    text-decoration: none
+    color: #1d9d2b
+
 .downloadbutton
   width: 100%
   text-align: center
-  background: #555
+  background: $accent1
   display: block
   text-decoration: none
   color: #fff
@@ -49,6 +47,6 @@
   transition: all .2s ease-in-out
   border-radius: 3px
   &:hover
-    background: #fff
-    color: #444
+    background: $focusaccent1
+    color: #fff
     text-decoration: none

@@ -1,6 +1,7 @@
 //= require ../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss
 //= require ../../bower_components/fontawesome/scss/font-awesome.scss
 
+@import base
 @import post
 @import blog
 @import nav
@@ -13,10 +14,6 @@
 @import contact
 @import syntax
 
-@font-face
-  font-family: remachine_script
-  src: url('/images/remachine_script.ttf')
-
 body
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
 
@@ -25,9 +22,6 @@ body
   margin-left: auto !important
   margin-right: auto !important
   text-align: center !important
-
-.remachine
-  font-family: remachine_script
 
 .mainlogo
   @extend .remachine
