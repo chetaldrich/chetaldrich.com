@@ -26,7 +26,7 @@
           .skillbar-title
             %span
               JavaScript
-          .skillbar-bar{:style => "background: #525252;"}
+          .skillbar-bar{:style => "background: #edeb2e;"}
           .skill-bar-percent Familiar
         / End Skill Bar
         %p
@@ -41,8 +41,7 @@
           and also right here!
           %br/
           %br/
-          I'm currently hoping to explore other full stack technologies, such as the MEAN stack, and I am looking to learn on AngularJS for front-end.
-        .skillbar.clearfix{"data-percent" => "80%"}
+        .skillbar.clearfix{"data-percent" => "85%"}
           .skillbar-title
             %span
               Java
@@ -51,10 +50,16 @@
         / End Skill Bar
         %p
           I have significant experience in Java stemming from courses I have taken at Carleton, specifically
-          Data Structures and Software Design, where Java has been used extensively. Recently, I produced an Asteroids
-          game using the JavaFX framework, the code for which is viewable
-          %a{:href => "https://github.com/chetaldrich/Asteroids"} here.
-        .skillbar.clearfix{"data-percent" => "80%"}
+          Data Structures and Software Design, where Java has been used extensively. One such example is an
+          %a{:href => "https://github.com/chetaldrich/Asteroids"} Asteroids
+          game using the JavaFX framework. In addition, I've dabbled with genetic programming in Java, which was used to create an intelligent player for
+          %a{:href => "http://cs.gettysburg.edu/~tneller/games/pokersquares/eaai/intro.pdf"} Poker Squares.
+          The project can be viewed
+          %a{:href => "https://github.com/chetaldrich/pokersquares"} here.
+
+
+
+        .skillbar.clearfix{"data-percent" => "85%"}
           .skillbar-title
             %span
               Python
@@ -62,10 +67,28 @@
           .skill-bar-percent Proficient
         / End Skill Bar
         %p
-          Additionally, I have experience using Python, mostly in the context of web applications. A good example of this is
+          Additionally, I have experience using Python, in a variety of applications, from web development to machine learning.
+
+          One such example is
           %a{:href => "https://github.com/chetaldrich/targethelp"} AskTarget
-          application,
-          built using Twilio and the Flask web framework, which acts as a help center in a retail store accessible by phone.
+          , built using Twilio and the Flask web framework, which acts as a help center in a
+          retail store accessible by phone.
+
+          Another example is where I used machine learning techniques to recognize
+          %a{:href => "http://yann.lecun.com/exdb/mnist/"} MNIST
+          digits, which includes over 60,000 handwritten digits that were used for training in
+          %a{:href => "https://github.com/chetaldrich/MLOCR"} this project.
+
+
+        .skillbar.clearfix{"data-percent" => "80%"}
+          .skillbar-title
+            %span
+              C
+          .skillbar-bar{:style => "background: #242625;"}
+          .skill-bar-percent Proficient
+        / End Skill Bar
+        %p
+          I have some non-trivial work that has been done in C, which includes an ongoing bug fix for scrollbars in the 32-bit implementation of Windows in Wine, open source virtualization software for Linux. In addition, I've implemented a rudimentary interpreter for Scheme, a functional programming language which is a descendant of Lisp.
         .skillbar.clearfix{"data-percent" => "60%"}
           .skillbar-title
             %span
@@ -74,4 +97,4 @@
           .skill-bar-percent Familiar
         / End Skill Bar
         %p
-          Finally, I have recently been learning Ruby, specifically in the context of Ruby on Rails for the time being.
+          Finally, I have some experience with Ruby, which is mostly self-taught, and manifests itself in small scripts and some of the knowledge used to build this website, which is currently created with Middleman.
