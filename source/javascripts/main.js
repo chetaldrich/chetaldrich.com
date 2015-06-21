@@ -2,3 +2,4 @@
 //= require "modernizr"
 //= require "bootstrap"
 //= require "skillbar"
+//= require "animatescroll/animatescroll.js"

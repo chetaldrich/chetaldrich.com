@@ -105,5 +105,5 @@ configure :build do
 end
 
 after_configuration do
-      sprockets.append_path File.join root.to_s, "bower_components"
+    sprockets.append_path File.join root.to_s, 'bower_components'
 end
