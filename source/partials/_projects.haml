@@ -4,24 +4,28 @@
       %h2 Check out some of my work!
     .row
       .col-md-4.col-xs-12
-        %a{"data-target" => "#dunmo", "data-toggle" => "modal"}
-          %img{:alt => "Dunmo", :height => "200", :src => "images/dunmo.png", :width => "200"}/
+        %a{"data-target" => "#sensesf", "data-toggle" => "modal"}
+          %img{:alt => "SenseSF", :height => "200", :src => "images/sensesf.png", :width => "200"}/
       .col-md-4.col-xs-12
         %a{"data-target" => "#chetaldrich", "data-toggle" => "modal"}
           %img{:alt => "This website!", :height => "200", :src => "images/projectca.png", :width => "200"}/
       .col-md-4.col-xs-12
         %a{"data-target" => "#asktarget", "data-toggle" => "modal"}
           %img{:alt => "Ask Target", :height => "200", :src => "images/asktarget.png", :width => "200"}/
-      .row
-        #projects2.col-md-6.col-xs-12
-          %a{"data-target" => "#shareplay", "data-toggle" => "modal"}
-            %img{:alt => "SharePlay", :height => "200", :src => "images/shareplay.jpg", :width => "200"}/
-        #projects2.col-md-6.col-xs-12
-          %a{"data-target" => "#sensesf", "data-toggle" => "modal"}
-            %img{:alt => "SenseSF", :height => "200", :src => "images/sensesf.png", :width => "200"}/
+    .row
+      #projects2.col-md-4.col-xs-12
+        %a{"data-target" => "#mlocr", "data-toggle" => "modal"}
+          %img{:alt => "MLOCR", :height => "200", :src => "images/mlocr.png", :width => "200"}/
+      #projects2.col-md-4.col-xs-12
+        %a{"data-target" => "#shareplay", "data-toggle" => "modal"}
+          %img{:alt => "SharePlay", :height => "200", :src => "images/shareplay.jpg", :width => "200"}/
+      #projects2.col-md-4.col-xs-12
+        %a{"data-target" => "#pokersquares", "data-toggle" => "modal"}
+          %img{:alt => "PokerSquares", :height => "200", :src => "images/pokersquares.png", :width => "200"}/
+
 
 / Modals for Projects
-/ Shareplay Modal
+/ Shareplay
 #shareplay.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -46,7 +50,8 @@
           = succeed "." do
             %a{:href => "https://github.com/Kenadia/SharePlay"} here
       .modal-footer
-/ chetaldrich.com Modal
+
+/ chetaldrich.com
 #chetaldrich.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -68,7 +73,8 @@
           = succeed "." do
             %a{:href => "https://github.com/chetaldrich/chetaldrich.com"} here
       .modal-footer
-/ askTarget Modal
+
+/ askTarget
 #asktarget.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -96,7 +102,8 @@
           = succeed "." do
             %a{:href => "https://github.com/chetaldrich/targethelp"} here
       .modal-footer
-/ senseSF Modal
+
+/ senseSF
 #sensesf.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -119,20 +126,36 @@
           frog San Francisco office. I constructed sensors and used five Raspberry Pi
           devices to provide JSON data used for the visualizations.
       .modal-footer
-/ Dunmo Modal
-#dunmo.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+
+/ PokerSquares
+#pokersquares.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
       .modal-header
         %button.close{"data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} ×
           %span.sr-only Close
-        %h4#myModalLabel.modal-title Dunmo
+        %h4#myModalLabel.modal-title PokerSquares
       .modal-body
-        %img.inmodal{:alt => "Dunmo", :src => "images/dunmomock.png"}/
+        %img.inmodal{:alt => "PokerSquares", :src => "images/pokersquares.png"}/
         %p
           %br/
-          A web application built using Meteor at MHacks V which intelligently decides how to
-          schedule tasks that you need done during the day, as well as making appropriate divisions
-          for large tasks.
+          [Add description here]
+      .modal-footer
+
+
+/ MLOCR
+#mlocr.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title OCR with MNIST
+      .modal-body
+        %img.inmodal{:alt => "MLOCR", :src => "images/mlocr.png"}/
+        %p
+          %br/
+          [Add description here]
       .modal-footer
