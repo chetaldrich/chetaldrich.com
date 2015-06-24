@@ -15,4 +15,15 @@ $(document).ready(function() {
     $(".down_arrow").click(function() {
         $("body").animate({ scrollTop: $('#about').offset().top }, 1000);
     });
+
+    $(".projects_link").click(function() {
+        $("body").animate({ scrollTop: $('#projects').offset().top }, 1000);
+    });
+
+    $(".contact_link").click(function() {
+        $("body").animate({ scrollTop: $('#contact').offset().top }, 1000);
+        $(".envelope").delay(1000).animate({ fontSize: "120px" }, 1500);
+        $(".envelope").animate({ fontSize: "100px" }, 1500);
+    });
+
 });
