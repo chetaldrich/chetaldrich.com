@@ -15,7 +15,7 @@
     = javascript_include_tag 'main'
     // CSS
     = stylesheet_link_tag 'styles'
-    // Favicon TODO make a new favicon
+    %link{:href => "images/favicon.png", :rel => "shortcut icon", :type => "image/png"}
   %body
     #main{:role => "main"}
       = yield
