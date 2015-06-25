@@ -6,6 +6,12 @@
       %li
         %a{:href => "blog"} Articles
       %li
-        %a.projects_link Projects
+        - if current_page.path.eql? "blog.html"
+          %a{:href => "/#projects"} Projects
+        - else
+          %a.projects_link Projects
       %li
-        %a.contact_link Contact
+        - if current_page.path.eql? "blog.html"
+          %a{:href => "/#contact"} Contact
+        - else
+          %a.contact_link Contact
