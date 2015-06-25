@@ -44,11 +44,9 @@
           of Technology.
           %br/
           %br/
-          A demo can be seen
-          %a{:href => "http://shareplay.me"} here
-          or you can take a look at the code
+          You can take a look at the project
           = succeed "." do
-            %a{:href => "https://github.com/Kenadia/SharePlay"} here
+            %a.modal-link{:href => "https://github.com/Kenadia/SharePlay"} here
       .modal-footer
 
 / chetaldrich.com
@@ -64,14 +62,18 @@
         %img.inmodal{:alt => "chetaldrich.com", :src => "images/personalsite.png"}/
         %p
           %br/
-          This website became a pet project beginning in November of 2014, and I finished with the first site in about two weeks.
-          I tinker with it now and then, particularly if I want to try learning how to do something applicable to web development.
-          Right now that means building a blog for the website with Middleman.
+          This website became a pet project beginning in November of 2014, and I finished
+          with the first site in about two weeks, the result of which is shown above.
+          I tinker with it now and then, particularly if I want to try learning how to do
+          something applicable to web development.
+
+          Currently I'm adding final touches to the redesign that you are viewing now,
+          created with Middleman to allow for a blog. Articles coming soon!
           %br/
           %br/
           Go ahead and take a look at the current development version of the site
           = succeed "." do
-            %a{:href => "https://github.com/chetaldrich/chetaldrich.com"} here
+            %a.modal-link{:href => "https://github.com/chetaldrich/chetaldrich.com"} here
       .modal-footer
 
 / askTarget
@@ -100,7 +102,7 @@
           %br/
           You can take a look at the project
           = succeed "." do
-            %a{:href => "https://github.com/chetaldrich/targethelp"} here
+            %a.modal-link{:href => "https://github.com/chetaldrich/targethelp"} here
       .modal-footer
 
 / senseSF
@@ -117,7 +119,7 @@
           You are using an
           %strong outdated
           browser. Please
-          %a{:href => "http://browsehappy.com/"} upgrade your browser
+          %a.modal-link{:href => "http://browsehappy.com/"} upgrade your browser
           to improve your experience.
         %p
           %br/
@@ -137,10 +139,15 @@
           %span.sr-only Close
         %h4#myModalLabel.modal-title PokerSquares
       .modal-body
-        %img.inmodal{:alt => "PokerSquares", :src => "images/pokersquares.png"}/
+        %img.inmodal{:alt => "PokerSquares", :src => "images/pokersquares_project.png"}/
         %p
-          %br/
-          [Add description here]
+          %br
+          Created as part of research into artificial intelligence algorithms for Poker
+          Squares, this project employs a novel genetic programming method that uses
+          decision tree like structures to create evolvable "programs" that would then
+          directly play the game before mutation and subsequent evolution.
+          You can see the Java (1.8) implementation
+          %a.modal-link{:href => "https://github.com/chetaldrich/pokersquares"} here.
       .modal-footer
 
 
@@ -154,8 +161,14 @@
           %span.sr-only Close
         %h4#myModalLabel.modal-title OCR with MNIST
       .modal-body
-        %img.inmodal{:alt => "MLOCR", :src => "images/mlocr.png"}/
+        %img.inmodal{:alt => "MLOCR", :src => "images/mlocr_graph.png"}/
         %p
-          %br/
-          [Add description here]
+          %br
+          Created to learn more about supervised machine learning algorithms, this project
+          includes Python implementations of Perceptron and Naive Bayes machine learning
+          algorithms with extensive options to allow for measurement and testing of the
+          algorithms to determine effectiveness. The perceptron was able to reach nearly 90%
+          accuracy with sufficient training (approximately 3 hours) on the MNIST data set.
+          The implementations can be examined and run
+          %a.modal-link{:href => "https://github.com/chetaldrich/MLOCR"} here.
       .modal-footer
