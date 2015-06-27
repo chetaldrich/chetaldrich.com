@@ -11,6 +11,7 @@ gem "jquery-middleman"
 gem "middleman-syntax"
 gem "redcarpet"
 gem 'font-awesome-middleman'
+gem 'middleman-deploy', '~> 1.0'
 
 # For feed.xml.builder
 gem "builder", "~> 3.0"

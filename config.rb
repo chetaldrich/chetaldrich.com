@@ -91,18 +91,40 @@ set :fonts_dir, 'fonts'
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
-   activate :minify_css
+  activate :minify_css
 
   # Minify Javascript on build
-   activate :minify_javascript
+  activate :minify_javascript
 
   # Enable cache buster
   # activate :asset_hash
 
   # Use relative URLs
-   activate :relative_assets
+  activate :relative_assets
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
+end
+
+activate :deploy do |deploy|
+  begin
+    require "./local_config.rb"
+  rescue LoadError
+    puts "Your local_config file is not available."
+    puts "Include a file with the following format:\n"
+    puts "SITE_HOST = \"Your_ftp_site_host\""
+    puts "SITE_PATH = \"Your_ftp_site_path\""
+    puts "SITE_USERNAME = \"Your_ftp_user_name\""
+    puts "SITE_PASSWORD = \"Your_ftp_password\"\n"
+    puts "If you are not deploying, dummy values are sufficient"
+    puts "for server and build commands."
+    exit
+  end
+
+  deploy.method   = :ftp
+  deploy.host     = SITE_HOST
+  deploy.path     = SITE_PATH
+  deploy.user     = SITE_USERNAME
+  deploy.password = SITE_PASSWORD
 end
 
 after_configuration do
