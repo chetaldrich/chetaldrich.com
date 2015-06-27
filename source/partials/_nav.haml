@@ -1,17 +1,17 @@
 .container.fix-top
   %nav.masthead
-    %a.masthead-brand{:href => "/"} chetaldrich
+    = link_to "chetaldrich", "/", :class => "masthead-brand"
 
     %ul.nav.masthead-nav
       %li
-        %a{:href => "blog"} Articles
+        = link_to "Articles", "articles"
       %li
-        - if current_page.path.eql? "blog.html"
-          %a{:href => "/#projects"} Projects
+        - if current_page.path.eql? "articles.html"
+          = link_to "Projects", "/#projects"
         - else
           %a.projects_link Projects
       %li
-        - if current_page.path.eql? "blog.html"
-          %a{:href => "/#contact"} Contact
+        - if current_page.path.eql? "articles.html"
+          = link_to "Contact", "/#contact"
         - else
           %a.contact_link Contact
