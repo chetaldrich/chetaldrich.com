@@ -7,7 +7,7 @@
   %p
     Page #{page_number} of #{num_pages}
   - if prev_page
-    %p= link_to 'Previous page', prev_page
+    %p= link_to "Previous page", prev_page
 .entries
   .container
     %h1 Coming soon!
@@ -21,4 +21,4 @@
     -#     %hr
 - if paginate
   - if next_page
-    %p= link_to 'Next page', next_page
+    %p= link_to "Next page", next_page

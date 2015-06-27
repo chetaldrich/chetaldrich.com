@@ -1,10 +1,16 @@
 .container.fix-top
   %nav.masthead
-    = link_to "chetaldrich", "/", :class => "masthead-brand"
+    - if current_page.path.eql? "articles.html"
+      = link_to "chetaldrich", "../", :class => "masthead-brand"
+    - else
+      = link_to "chetaldrich", "", :class => "masthead-brand"
 
     %ul.nav.masthead-nav
       %li
-        = link_to "Articles", "articles"
+        - if current_page.path.eql? "articles.html"
+          = link_to "Articles", ""
+        - else
+          = link_to "Articles", "articles"
       %li
         - if current_page.path.eql? "articles.html"
           = link_to "Projects", "/#projects"
