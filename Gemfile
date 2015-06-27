@@ -10,5 +10,7 @@ gem "bootstrap-sass"
 gem "jquery-middleman"
 gem "middleman-syntax"
 gem "redcarpet"
+gem 'font-awesome-middleman'
+
 # For feed.xml.builder
 gem "builder", "~> 3.0"
