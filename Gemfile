@@ -12,6 +12,7 @@ gem "middleman-syntax"
 gem "redcarpet"
 gem 'font-awesome-middleman'
 gem 'middleman-deploy', '~> 1.0'
+gem "middleman-google-analytics"
 
 # For feed.xml.builder
 gem "builder", "~> 3.0"
