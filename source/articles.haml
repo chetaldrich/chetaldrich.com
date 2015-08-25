@@ -10,15 +10,14 @@
     %p= link_to "Previous page", prev_page
 .entries
   .container
-    %h1 Coming soon!
-    -# - page_articles.each_with_index do |article, i|
-    -#   .entry
-    -#     %h2
-    -#       = link_to article.title, article
-    -#     %span Chet Aldrich &middot;
-    -#     %span= article.date.strftime('%b %e %Y')
-    -#     %p= article.data.summary
-    -#     %hr
+    - page_articles.each_with_index do |article, i|
+      .entry
+        %h2
+          = link_to article.title, article
+        %span Chet Aldrich &middot;
+        %span= article.date.strftime('%b %e %Y')
+        %p= article.data.summary
+        %hr
 - if paginate
   - if next_page
     %p= link_to "Next page", next_page

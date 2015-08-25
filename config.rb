@@ -34,7 +34,7 @@ page "/feed.xml", layout: false
 
 activate :syntax
 set :markdown_engine, :redcarpet
-set :markdown, :fenced_code_blocks => true, :smartypants => true, :disable_indented_code_blocks => true
+set :markdown, :fenced_code_blocks => true, :autolink => true, :smartypants => true, :disable_indented_code_blocks => true
 
 ###
 # Compass
@@ -101,8 +101,9 @@ configure :build do
 
   # Use relative URLs
   activate :relative_assets
+  
   # Or use a different image path
-  # set :http_prefix, "/Content/images/"
+  # set :http_prefix, "/images/"
 end
 
 activate :deploy do |deploy|
