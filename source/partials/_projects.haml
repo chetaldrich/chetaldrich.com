@@ -1,0 +1,174 @@
+#projects.projects
+  .container
+    .row
+      %h2 Check out some of my work!
+    .row
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#sensesf", "data-toggle" => "modal"}
+          %img{:alt => "SenseSF", :height => "200", :src => "images/sensesf.png", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#chetaldrich", "data-toggle" => "modal"}
+          %img{:alt => "This website!", :height => "200", :src => "images/projectca.png", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#asktarget", "data-toggle" => "modal"}
+          %img{:alt => "Ask Target", :height => "200", :src => "images/asktarget.png", :width => "200"}/
+    .row.projects_row2
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#mlocr", "data-toggle" => "modal"}
+          %img{:alt => "MLOCR", :height => "200", :src => "images/mlocr.png", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#shareplay", "data-toggle" => "modal"}
+          %img{:alt => "SharePlay", :height => "200", :src => "images/shareplay.jpg", :width => "200"}/
+      .col-md-4.col-xs-12
+        %a{"data-target" => "#pokersquares", "data-toggle" => "modal"}
+          %img{:alt => "PokerSquares", :height => "200", :src => "images/pokersquares.png", :width => "200"}/
+
+
+/ Modals for Projects
+/ Shareplay
+#shareplay.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h2.modal-title SharePlay
+      .modal-body
+        %a{:href => "http://shareplay.me"}
+          %img.inmodal{:alt => "screenshot", :src => "images/shareplayshot.png"}/
+        %p
+          A concurrently edited playlist manager and music player that users can text
+          message to add to the queue. Implemented with Meteor.js, Bootstrap, Beats
+          Music API and Twilio in 36 hours at HackGT, a hackathon at the Georgia Institute
+          of Technology.
+          %br/
+          %br/
+          You can take a look at the project
+          = succeed "." do
+            %a.modal-link{:href => "https://github.com/Kenadia/SharePlay"} here
+      .modal-footer
+
+/ chetaldrich.com
+#chetaldrich.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title chetaldrich.com
+      .modal-body
+        %img.inmodal{:alt => "chetaldrich.com", :src => "images/personalsite.png"}/
+        %p
+          %br/
+          This website became a pet project beginning in November of 2014, and I finished
+          with the first site in about two weeks, the result of which is shown above.
+          I tinker with it now and then, particularly if I want to try learning how to do
+          something applicable to web development.
+
+          I eventually made a redesign that you are viewing now,
+          created with Middleman to allow for a simply curated blog. 
+          %br/
+          %br/
+          Go ahead and take a look at the current development version of the site
+          = succeed "." do
+            %a.modal-link{:href => "https://github.com/chetaldrich/chetaldrich.com"} here
+      .modal-footer
+
+/ askTarget
+#asktarget.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title Ask Target
+      .modal-body
+        %img.inmodal{:alt => "AskTarget", :src => "images/asktargetflow.png"}/
+        %p
+          %br/
+          This help center-like web application was designed to provide a quick,
+          simple interface by which customers could quickly ask questions of staff
+          via text and get them answered quickly.
+          %br/
+          %br/
+          The interface uses a combination of the Flask web framework and Twilio API,
+          and was built in 24 hours for UHack at the University of Minnesota.
+          The project reached the second round of judging, which comprised of the
+          top twenty entries at the hackathon.
+          %br/
+          %br/
+          You can take a look at the project
+          = succeed "." do
+            %a.modal-link{:href => "https://github.com/chetaldrich/targethelp"} here
+      .modal-footer
+
+/ senseSF
+#sensesf.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title SenseSF
+      .modal-body
+        %video.inmodal{:autoplay => "", :controls => "", :poster => "sensesf.png", :src => "images/final.mp4"}
+          You are using an
+          %strong outdated
+          browser. Please
+          %a.modal-link{:href => "http://browsehappy.com/"} upgrade your browser
+          to improve your experience.
+        %p
+          %br/
+          A web application built using d3.js designed to provide simple data visualizations
+          for temperature, humidity, sound levels, and ambient light sensor data in the
+          frog San Francisco office. I constructed sensors and used five Raspberry Pi
+          devices to provide JSON data used for the visualizations.
+      .modal-footer
+
+/ PokerSquares
+#pokersquares.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title PokerSquares
+      .modal-body
+        %img.inmodal{:alt => "PokerSquares", :src => "images/pokersquares_project.png"}/
+        %p
+          %br
+          Created as part of research into artificial intelligence algorithms for Poker
+          Squares, this project employs a novel genetic programming method that uses
+          decision tree like structures to create evolvable "programs" that would then
+          directly play the game before mutation and subsequent evolution.
+          You can see the Java (1.8) implementation
+          %a.modal-link{:href => "https://github.com/chetaldrich/pokersquares"} here.
+      .modal-footer
+
+
+/ MLOCR
+#mlocr.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        %h4#myModalLabel.modal-title OCR with MNIST
+      .modal-body
+        %img.inmodal{:alt => "MLOCR", :src => "images/mlocr_graph.png"}/
+        %p
+          %br
+          Created to learn more about supervised machine learning algorithms, this project
+          includes Python implementations of Perceptron and Naive Bayes machine learning
+          algorithms with extensive options to allow for measurement and testing of the
+          algorithms to determine effectiveness. The perceptron was able to reach nearly 90%
+          accuracy with sufficient training (approximately 3 hours) on the MNIST data set.
+          The implementations can be examined and run
+          %a.modal-link{:href => "https://github.com/chetaldrich/MLOCR"} here.
+      .modal-footer
