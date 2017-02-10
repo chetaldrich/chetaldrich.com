@@ -1,4 +1,3 @@
-
 # standard haskell ignores
 dist
 dist-*
@@ -20,6 +19,9 @@ cabal.sandbox.config
 .stack-work/
 cabal.project.local
 .HTF/
+
+# hakyll ignores
+_site
 
 # mac related ignores
 .DS_Store
