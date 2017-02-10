@@ -22,6 +22,7 @@ cabal.project.local
 
 # hakyll ignores
 _site
+_cache
 
-# mac related ignores
+# macOS ignores
 .DS_Store
