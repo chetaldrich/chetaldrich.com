@@ -20,6 +20,15 @@ hr {
   border: 0;
 }
 
+a {
+    color: #222;
+    transition: 100ms color linear
+}
+
+a:hover {
+    color: #2691EF
+}
+
 img.blog {
   max-width: 100%;
   display: block;
