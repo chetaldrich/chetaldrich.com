@@ -1,4 +1,6 @@
 html {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+                  Helvetica, Arial, "Lucida Grande", sans-serif;
     margin-left: 5%;
     margin-right: 5%;
     padding: 0px;
@@ -12,6 +14,12 @@ body {
     max-width: 650px;
 }
 
+hr {
+	height: 6px;
+	background: url("../assets/hr.png") repeat-x 0 0;
+  border: 0;
+}
+
 .signature {
     display: block;
     margin: 0 auto;
@@ -21,15 +29,19 @@ body {
 
 .nav {
     padding-top: 7px;
+    padding-bottom: 10px;
     text-align: center;
 }
 
 .nav-elements {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .nav-elements a {
-    margin: 0px 30px 0px 6px;
+    margin: 6px 30px 0px 6px;
+    text-transform: uppercase;
+    color: #333;
+    text-decoration: none;
 }
 
 #content {
