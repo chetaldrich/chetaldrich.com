@@ -1,7 +1,7 @@
 machine:
 
   timezone:
-    America/Los_Angeles 
+    America/Los_Angeles
 
   ghc:
     version: 8.0.2
@@ -9,8 +9,8 @@ machine:
 dependencies:
 
   override:
-    - stack update 
-    - stack install 
+    - stack update
+    - stack install
 
 test:
 
@@ -20,7 +20,7 @@ test:
 post:
   - git submodule init
   - git submodule update
-  - cd _site/ && git checkout master 
+  - cd _site/ && git checkout test 
   - stack exec site build
 
 deployment:
@@ -33,5 +33,4 @@ deployment:
       - cd _site/ && git status
       - cd _site/ && git add --all
       - cd _site/ && git commit -m "Update (`date '+%F %T %Z'`) [ci skip]"
-      - cd _site/ && git push origin master
-
+      - cd _site/ && git push origin test

@@ -1,35 +1,41 @@
+html {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 0px;
+    height: 100%;
+}
+
 body {
-    color: black;
-    font-size: 16px;
-    margin: 0px auto 0px auto;
-    width: 600px;
+    margin: 0 auto;
+    padding: 0px 0px 0px 0px;
+    height: 100%;
+    max-width: 650px;
 }
 
-div#header {
-    border-bottom: 2px solid black;
-    margin-bottom: 30px;
-    padding: 12px 0px 12px 0px;
+.signature {
+    display: block;
+    margin: 0 auto;
+    padding-top: 30px;
+    width: 300px;
 }
 
-div#logo a {
-    color: black;
-    float: left;
+.nav {
+    padding-top: 7px;
+    text-align: center;
+}
+
+.nav-elements {
+    margin-top: 20px;
+}
+
+.nav-elements a {
+    margin: 0px 30px 0px 6px;
+}
+
+#content {
+    line-height: 1.6;
     font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-div#header #navigation {
-    text-align: right;
-}
-
-div#header #navigation a {
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 12px;
-    text-decoration: none;
-    text-transform: uppercase;
+    color: #333;
 }
 
 div#footer {
