@@ -26,8 +26,8 @@ main = hakyll $ do
             >>= relativizeUrls
 
     match "posts/*" $ do
-        route $ setExtension "html"
-        compile $ pandocCompiler
+        route idRoute
+        compile $ getResourceBody
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls

@@ -20,6 +20,12 @@ hr {
   border: 0;
 }
 
+img.blog {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
 .signature {
     display: block;
     margin: 0 auto;
