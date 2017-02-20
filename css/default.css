@@ -61,17 +61,12 @@ img.blog {
 
 #content {
     line-height: 1.6;
-    font-size: 18px;
+    font-size: 16px;
     color: #333;
 }
 
-div#footer {
-    border-top: solid 2px black;
-    color: #555;
-    font-size: 12px;
-    margin-top: 30px;
-    padding: 12px 0px 12px 0px;
-    text-align: right;
+.footer {
+    margin-bottom: 50px;
 }
 
 h1 {
