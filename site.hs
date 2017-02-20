@@ -20,13 +20,13 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "resume.pdf" $ do
+    match (fromList ["resume.pdf", "favicon.png"]) $ do
         route   idRoute
         compile copyFileCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
-        route   $ setExtension "html"
-        compile $ pandocCompiler
+    match (fromList ["projects.html"]) $ do
+        route   idRoute
+        compile $ getResourceBody
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
