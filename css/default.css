@@ -66,7 +66,25 @@ img.blog {
 }
 
 .footer {
-    margin-bottom: 50px;
+    height: 60px;
+    width: 100%;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.footer-left {
+  width: 80%;
+  float:left;
+}
+
+.footer-right {
+  float: right; /* add this */
+}
+
+.elevator-button {
+  margin-top: 12px;
+  vertical-align: middle;
+
 }
 
 h1 {

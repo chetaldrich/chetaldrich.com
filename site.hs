@@ -7,6 +7,7 @@ import           Hakyll
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
+
     match "assets/*" $ do
         route   idRoute
         compile copyFileCompiler
@@ -14,6 +15,10 @@ main = hakyll $ do
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "js/*" $ do
+        route   idRoute
+        compile copyFileCompiler
 
     match "resume.pdf" $ do
         route   idRoute
