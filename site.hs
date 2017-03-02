@@ -8,7 +8,7 @@ import           Hakyll
 main :: IO ()
 main = hakyll $ do
 
-    match "assets/*" $ do
+    match "assets/**" $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -31,8 +31,8 @@ main = hakyll $ do
             >>= relativizeUrls
 
     match "posts/*" $ do
-        route idRoute
-        compile $ getResourceBody
+        route $ setExtension "html"
+        compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
