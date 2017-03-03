@@ -61,6 +61,12 @@ a:hover {
     text-decoration: none;
 }
 
+@media screen and (max-width: 340px) {
+  .nav-elements a {
+    margin: 6px 15px 0px 6px;
+  }
+}
+
 #content {
     line-height: 1.6;
     font-size: 16px;

@@ -1,9 +1,6 @@
 machine:
   timezone:
     America/Los_Angeles
-  # ghc:
-  #   version:
-  #     8.0.1
 
 dependencies:
   pre:
