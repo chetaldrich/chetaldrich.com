@@ -1,12 +1,14 @@
 machine:
   timezone:
     America/Los_Angeles
-  ghc:
-    version:
-      8.0.1
+  # ghc:
+  #   version:
+  #     8.0.1
 
 dependencies:
   pre:
+    - mkdir -p ~/.local/bin
+    - export PATH=$HOME/.local/bin:$PATH
     - wget -qO- https://get.haskellstack.org/ | sh
   override:
     - stack setup
