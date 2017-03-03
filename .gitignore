@@ -21,7 +21,6 @@ cabal.project.local
 .HTF/
 
 # hakyll ignores
-_site
 _cache
 
 # macOS ignores
