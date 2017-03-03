@@ -20,7 +20,7 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match (fromList ["resume.pdf", "favicon.png", "CNAME"]) $ do
+    match (fromList ["resume.pdf", "favicon.png", "CNAME", "README.md"]) $ do
         route   idRoute
         compile copyFileCompiler
 
