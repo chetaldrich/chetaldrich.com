@@ -6,7 +6,7 @@ dependencies:
   pre:
     - mkdir -p ~/.local/bin
     - export PATH=$HOME/.local/bin:$PATH
-    - wget -qO- https://get.haskellstack.org/ | sh
+    - wget -qO- https://get.haskellstack.org/ | sh -s - -f
   override:
     - stack setup
     - stack update
