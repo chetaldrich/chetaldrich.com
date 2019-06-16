@@ -10,11 +10,14 @@ jobs:
           keys:
             - cci-demo-haskell-v1-{{ checksum "stack.yaml" }}
       - run:
-          name: Resolve/Update Dependencies
+          name: Resolve Dependencies
           command: stack setup
       - run:
-          name: Run tests
-          command: stack test
+          name: Update Dependencies
+          command: stack update
+      - run:
+          name: Install
+          command: stack install
       - save_cache:
           name: Cache Dependencies
           key: cci-demo-haskell-v1-{{ checksum "stack.yaml" }}
