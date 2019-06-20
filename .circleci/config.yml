@@ -22,6 +22,10 @@ jobs:
     docker:
       - image: fpco/stack-build:lts
     steps:
+      - restore_cache:
+          name: Restore Cached Dependencies
+          keys:
+            - cci-demo-haskell-v1-{{ checksum "stack.yaml" }}
       - run: stack build
       - run: stack
       - run: git submodule init
