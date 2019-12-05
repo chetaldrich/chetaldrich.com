@@ -24,7 +24,7 @@ h2 {
 
 hr {
 	height: 6px;
-	background: url("../assets/hr.png") repeat-x 0 0;
+	background: url("/images/hr.png") repeat-x 0 0;
     border: 0; 
 } 
 
