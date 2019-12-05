@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .Title }}</title>
+    {{ with .Site.Params.description }}
+    <meta name="description" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.author }}
+    <meta name="author" content="{{ . }}">
+    {{ end }}
+    <link rel="icon" type="image/png" href="{{ "/images/favicon.svg" | relURL }}">
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+    <script type="text/javascript" src="{{ "js/elevator.js" | relURL }}"></script>
+</head>
+
+<body>
+    {{ partial "header" . }}
+    <div id="content">
+        {{ block "main" . }}{{ end }}
+    </div>
+    {{ partial "footer" . }}
+</body>
+
+</html>
