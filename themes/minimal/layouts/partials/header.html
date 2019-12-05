@@ -1,5 +1,7 @@
 <div class="nav">
-	<a href="/"><img class="signature" src="/assets/signature_animated.svg" alt="{{ .Site.Params.Author }}"></a>
+	<a href="/">
+		<img class="signature" src="{{ "/images/signature_animated.svg" | relURL }}" alt="{{ .Site.Params.Author }}">
+	</a>
 	<div class="nav-elements">
 		<a href="/projects.html">Projects</a>
 		<a href="/archive.html">Blog</a>
