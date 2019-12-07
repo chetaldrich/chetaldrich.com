@@ -1,4 +1,7 @@
-{{ define "main" }}
+---
+title: "fjkdslaj;"
+---
+
 <h2>Projects</h2>
 
 This is a brief (and incomplete) list of apps, tools, and experiments that
@@ -33,4 +36,3 @@ to view.
     configurable
     to make use of Naive Bayes or a perceptron classifier.
 </p>
-{{ end }}
