@@ -1,19 +1,13 @@
 ---
-title: "fjkdslaj;"
+# title: "fjkdslaj;"
 ---
 
-<h2>Projects</h2>
+## Projects
 
 This is a brief (and incomplete) list of apps, tools, and experiments that
-I've worked on, in no particular order. All are available on <a href="https://github.com/chetaldrich">Github</a>
-to view.
+I've worked on, in no particular order. All are available on [Github]("https://github.com/chetaldrich") to view.
 
-<p>
-    <b>chetaldrich.com</b> - What you're looking at right now! Built with Hakyll, a static website generation library
-    written
-    in <a href="https://www.haskell.org">Haskell</a>. You can take a look at the development version of the site
-    <a href="https://github.com/chetaldrich/chetaldrich.github.io/tree/hakyll">here</a>.
-</p>
+*chetaldrich.com* - What you're looking at right now! Built with Hugo, a static website generation library written in [Go](https://golang.org/). You can take a look at the code for the site [here](https://github.com/chetaldrich/chetaldrich.github.io).
 
 <p>
     <b>Sesquicentennial</b> - Worked with a six person team on an iOS and Android app that lets you explore Carleton's
