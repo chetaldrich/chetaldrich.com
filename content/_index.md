@@ -1,5 +1,5 @@
 ---
-title: Main page
+title: Chet Aldrich 
 date: 2017-11-01T18:28:28+02:00
 ---
 
