@@ -1,7 +1,6 @@
 ---
 title: Main page
 date: 2017-11-01T18:28:28+02:00
-description: The home page template for creating website by using the Hugo framework
 ---
 
 Hey, I'm Chet.
