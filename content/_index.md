@@ -9,7 +9,7 @@ Professional data plumber. Dog whisperer. All-around nice guy.
 
 I'm currently building data pipelines and backend infrastructure at [Postmates](https://postmates.com).
 I also spent some time at [Pandora](https://pandora.com) building content and 
-advertising tools such as[AMP](https://amp.pandora.com).
+advertising tools such as [AMP](https://amp.pandora.com).
 
 You may find me reading about distributed systems, functional programming, economics, finance,
 artificial intelligence, history, and even the occasional travelogue in my spare time. Feel free to check out
