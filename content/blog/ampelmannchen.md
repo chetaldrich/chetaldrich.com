@@ -7,7 +7,7 @@ draft: false
 
 If you've ever been to the eastern part of Berlin, you may have seen a certain pedestrian at most lights:
 
-![The Green Ampelmannchen](/assets/posts/2016-08-14-berlin/ampelmannchen_green.jpg)
+![The Green Ampelmannchen](/static/posts/2016-08-14-berlin/ampelmannchen_green.jpg)
 
 It's admittedly easy to overlook when you are seeking out the Brandenburg Gate the the remains of the Berlin Wall, but this oddly proportioned fellow is one of the few surviving relics of the old East Berlin.
 
