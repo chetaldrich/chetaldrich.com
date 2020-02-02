@@ -2,8 +2,11 @@
 
 <h1>{{ .Title }}</h1>
 {{ range .Pages.ByPublishDate.Reverse }}
+{{ $dateTime := .PublishDate.Format "yyyy-mm-dd" }}
+{{ $dateFormat := .Site.Params.dateFormat }}
 <p>
-  <a class="font-125" href="{{ .RelPermalink }}">{{ .Title }}</a>
+  <a class="font-125" href="{{ .RelPermalink }}">{{ .Title }}</a> -
+  <time datetime="{{ $dateTime }}">{{ .PublishDate.Format $dateFormat }}</time>
 </p>
 {{ end }}
 
