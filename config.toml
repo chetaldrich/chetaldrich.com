@@ -4,3 +4,10 @@ title = "Chet Aldrich"
 
 [permalinks]
   blog = "/:filename/"
+
+[taxonomies]
+  tag = "tags"
+
+[params]
+  dateFormat = "Jan 2, 2006"
+  homeText = "You just made a Hugo blog from scratch."
