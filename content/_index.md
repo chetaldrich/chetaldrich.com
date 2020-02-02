@@ -5,8 +5,6 @@ date: 2017-11-01T18:28:28+02:00
 
 Hey, I'm Chet.
 
-Professional data plumber. Dog whisperer. All-around nice guy.
-
 I'm currently building data pipelines and backend infrastructure at [Postmates](https://postmates.com).
 I also spent some time at [Pandora](https://pandora.com) building content and 
 advertising tools such as [AMP](https://amp.pandora.com).
