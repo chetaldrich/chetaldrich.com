@@ -5,7 +5,7 @@ tags: ["pandora", "software"]
 draft: false
 ---
 
-Imagine for a moment that you're listening to Pandora and you thumb a track. What happens then? Obviously, there's the secret sauce that Pandora uses to get you that next song. Because the [#nextsongmatters](https://www.youtube.com/watch?v=lngTK6E9VsI). However, there's another service provided by Pandora that uses those thumbs as a part of a platform from which they can speak with you, the listener.
+Imagine for a moment that you're listening to Pandora and you thumb a track. What happens then? Obviously, there's the secret sauce that Pandora uses to get you that next song. However, there's another service provided by Pandora that uses those thumbs as a part of a platform from which they can speak with you, the listener.
 
 Appropriately, the platform is called [AMP](http://amp.pandora.com), and I got a chance to work on it this summer as a Software Engineer Intern.
 
