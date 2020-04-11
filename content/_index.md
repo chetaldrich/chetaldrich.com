@@ -18,4 +18,4 @@ If you'd like to see some samples of my work, feel free to check out my <a href=
 If you're here looking to hire me, or just have a book recommendation you'd like to share,
 feel free to ping me at [chetaldrich@gmail.com](mailto:chetaldrich@gmail.com).
 If you're just here to look, you can also check out my [LinkedIn](https://linkedin.com/in/chetaldrich")
-and [GitHub]("https://github.com/chetaldrich").
+and [GitHub](https://github.com/chetaldrich).
