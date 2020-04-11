@@ -3,10 +3,10 @@
 <h1>{{ .Title }}</h1>
 
 {{ range .Data.Terms.ByCount }}
-<p>
-  <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
-  - <span>{{ .Count }}</span>
-</p>
+<!-- <p> -->
+<!-- <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+  - <span>{{ .Count }}</span> -->
+<!-- </p> -->
 {{ end }}
 {{ partial "footer" . }}
 {{ end }}
