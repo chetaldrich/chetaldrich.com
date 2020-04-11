@@ -6,7 +6,7 @@ draft: false
 ## Projects
 
 This is a brief (and incomplete) list of apps, tools, and experiments that
-I've worked on, in no particular order. All are available on [Github]("https://github.com/chetaldrich") to view.
+I've worked on, in no particular order. All are available on [Github](https://github.com/chetaldrich) to view.
 
 *chetaldrich.com* - What you're looking at right now! Built with Hugo, a static website generation library 
 written in [Go](https://golang.org/). You can take a look at the code for the site 
