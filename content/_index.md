@@ -5,9 +5,8 @@ date: 2017-11-01T18:28:28+02:00
 
 Hey, I'm Chet.
 
-I'm currently building data pipelines and backend infrastructure at [Postmates](https://postmates.com).
-I also spent some time at [Pandora](https://pandora.com) building content and 
-advertising tools such as [AMP](https://amp.pandora.com).
+I'm currently working on improving the seller experience at [Amazon](https://amazon.com).
+I also spent some time at [Postmates](https://postmates.com) and [Pandora](https://pandora.com).
 
 You may find me reading about distributed systems, functional programming, economics, finance,
 artificial intelligence, history, and even the occasional travelogue in my spare time. Feel free to check out
