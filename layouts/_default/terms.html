@@ -1,0 +1,12 @@
+{{ define "main" }}
+
+<h1>{{ .Title }}</h1>
+
+{{ range .Data.Terms.ByCount }}
+<p>
+  <p>{{ .Term }}</p> - <span>{{ .Count }}</span>
+</p>
+
+{{ end }}
+{{ partial "footer" . }}
+{{ end }}

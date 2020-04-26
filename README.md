@@ -1,6 +1,2 @@
-# chetaldrich.github.io ![Build Status](https://circleci.com/gh/chetaldrich/chetaldrich.github.io/tree/hakyll.svg?style=shield&circle-token=e0bf2418f1d55a929775a436630941f56f019f20)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7f1d46a7-e767-4be0-a70e-867b9ddcd463/deploy-status)](https://app.netlify.com/sites/chetaldrich/deploys)
 
-Viewable at [chetaldrich.com](http://chetaldrich.com).
-
-The site is currently built with Hakyll, and the development version of the site
-is available on the [hakyll branch](https://github.com/chetaldrich/chetaldrich.github.io/tree/hakyll).
