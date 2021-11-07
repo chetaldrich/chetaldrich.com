@@ -5,13 +5,10 @@ date: 2017-11-01T18:28:28+02:00
 
 Hey, I'm Chet.
 
-I'm currently working on improving the seller experience at [Amazon](https://amazon.com).
-I also spent some time at [Postmates](https://postmates.com) and [Pandora](https://pandora.com).
+I'm currently writing software for [Root Insurance](https://www.joinroot.com/).
+I also spent some time at [Amazon](https://amazon.com) and [Postmates](https://postmates.com).
 
-You may find me reading about distributed systems, functional programming, economics, finance,
-artificial intelligence, history, and even the occasional travelogue in my spare time. Feel free to check out
-what I'm reading [here](https://www.goodreads.com/user/show/61719074-chet-aldrich).
-I'm also an avid traveler and occasional hiker, and those adventures will show up in the blog from time to time.
+You may find me reading books about technology, economics, urbanism, history, and politics in my spare time. I keep a log of what I'm reading [here](https://www.goodreads.com/user/show/61719074-chet-aldrich).
 
 If you'd like to see some samples of my work, feel free to check out my <a href="/projects.html">projects</a>.
 
