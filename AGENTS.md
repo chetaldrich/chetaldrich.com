@@ -21,6 +21,4 @@ Personal site built with [Hugo](https://gohugo.io), deployed on Netlify (auto-de
 ## Quirks
 
 - **No package.json, Makefile, or CI config.** Hugo is the only dependency. No npm/node needed.
-- **Elevator.js script** (`js/elevator.js`) is referenced in `layouts/_default/baseof.html` but does not exist in `static/`. It was likely served from a CDN or is broken.
-- **Blog post audio paths** in `layouts/blog/single.html` hardcode `/assets/elevator.mp3` and `/assets/ding.mp3`, but the actual files are at `static/sounds/elevator.mp3` and `static/sounds/ding.mp3` — a path mismatch.
-- `.DS_Store` and `public/` are gitignored.
+- **Elevator.js** — the script is vendored at `static/js/elevator.js` (from [tholman/elevator.js](https://github.com/tholman/elevator.js)). Audio files are at `static/sounds/`. The blog post template (`layouts/blog/single.html`) references them via `/sounds/` paths.
