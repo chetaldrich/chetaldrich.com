@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 
-<body>
+<body{{ if .IsHome }} class="home"{{ end }}>
     {{ partial "header" . }}
     <div id="content">
         {{ block "main" . }}{{ end }}
