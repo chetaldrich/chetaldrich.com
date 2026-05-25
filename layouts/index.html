@@ -1,4 +1,22 @@
 {{ define "main" }}
 {{ .Content }}
+{{ with .Site.Data.experience }}
+<section class="experience">
+    <h2>Experience</h2>
+    {{ range . }}
+    <div class="cv-company">
+        <span class="company-name"><a href="{{ .url }}"><img src="/images/logos/{{ .slug }}.svg" alt="{{ .company }}" class="company-logo"></a></span>
+        <div class="cv-roles">
+            {{ range .roles }}
+            <div class="cv-role">
+                <span class="role-title">{{ .title }}</span>
+                <span class="years">{{ .start }} – {{ .end }}</span>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+</section>
+{{ end }}
 {{ partial "footer" . }}
 {{ end }}

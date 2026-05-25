@@ -1,0 +1,39 @@
+[
+  {
+    "company": "Root Insurance",
+    "url": "https://www.joinroot.com",
+    "slug": "root",
+    "roles": [
+      { "title": "Senior Staff Software Engineer", "start": "Mar 2024", "end": "Present" },
+      { "title": "Staff Software Engineer", "start": "Nov 2022", "end": "Mar 2024" },
+      { "title": "Senior Software Engineer", "start": "Oct 2021", "end": "Nov 2022" }
+    ]
+  },
+  {
+    "company": "Amazon",
+    "url": "https://amazon.com",
+    "slug": "amazon",
+    "roles": [
+      { "title": "Software Development Engineer", "start": "Apr 2020", "end": "Aug 2021" }
+    ]
+  },
+  {
+    "company": "Postmates",
+    "url": "https://postmates.com",
+    "slug": "postmates",
+    "roles": [
+      { "title": "Senior Software Engineer", "start": "Sep 2019", "end": "Apr 2020" },
+      { "title": "Software Engineer II", "start": "Feb 2018", "end": "Sep 2019" },
+      { "title": "Software Engineer", "start": "Sep 2017", "end": "Feb 2018" }
+    ]
+  },
+  {
+    "company": "Pandora",
+    "url": "https://pandora.com",
+    "slug": "pandora",
+    "roles": [
+      { "title": "Software Engineer", "start": "Aug 2016", "end": "Aug 2017" },
+      { "title": "Software Engineer Intern", "start": "Jun 2015", "end": "Aug 2015" }
+    ]
+  }
+]

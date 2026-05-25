@@ -6,7 +6,6 @@ date: 2017-11-01T18:28:28+02:00
 Hey, I'm Chet.
 
 I'm a Senior Staff Software Engineer at [Root Insurance](https://www.joinroot.com/).
-I've spent time at [Amazon](https://amazon.com) and [Postmates](https://postmates.com).
 
 I keep a reading log on [Goodreads](https://www.goodreads.com/user/show/61719074-chet-aldrich).
 
