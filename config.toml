@@ -1,10 +1,7 @@
 baseURL = "http://chetaldrich.com/"
 languageCode = "en-us"
 title = "Chet Aldrich"
-
-[permalinks]
-  blog = "/:contentbasename/"
-
+ 
 [taxonomies]
   tag = "tags"
 
