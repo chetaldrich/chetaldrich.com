@@ -3,6 +3,7 @@
 {{ with .Site.Data.experience }}
 <section class="experience">
     <h2>Experience</h2>
+    <p class="resume-link">For more detail, please see my <a href="/resume.pdf">resume</a>.</p>
     {{ range . }}
     <div class="cv-company">
         <span class="company-name"><a href="{{ .url }}"><img src="/images/logos/{{ .slug }}.svg" alt="{{ .company }}" class="company-logo"></a></span>
