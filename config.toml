@@ -6,5 +6,6 @@ title = "Chet Aldrich"
   tag = "tags"
 
 [params]
-  dateFormat = "Jan 2, 2006"
-  homeText = "You just made a Hugo blog from scratch."
+dateFormat = "Jan 2, 2006"
+homeText = "You just made a Hugo blog from scratch."
+subtitle = "Senior Staff Software Engineer"

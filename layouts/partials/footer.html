@@ -1,1 +1,8 @@
-<footer></footer>
+<div class="statusbar">
+    <span class="statusbar-led" aria-hidden="true"></span>
+    <span class="statusbar-cell">{{ .Site.Params.subtitle }}</span>
+    <span class="statusbar-cell statusbar-right">
+        <a href="{{ "resume.pdf" | relURL }}">Resume</a>
+        <span class="statusbar-caret" aria-hidden="true"></span>
+    </span>
+</div>

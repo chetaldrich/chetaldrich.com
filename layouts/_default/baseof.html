@@ -14,12 +14,25 @@
     {{ end }}
     <link rel="icon" type="image/png" href="{{ "/images/favicon.svg" | relURL }}">
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+    {{ if .IsHome }}
+    <script defer src="{{ "js/moonlit-ridge.js" | relURL }}"></script>
+    {{ end }}
 </head>
 
 <body{{ if .IsHome }} class="home"{{ end }}>
-    {{ partial "header" . }}
-    <div id="content">
-        {{ block "main" . }}{{ end }}
+    <div class="viewport">
+        {{ partial "header" . }}
+        <div class="screen">
+            <div class="titlebar">
+                <span class="titlebar-mark" aria-hidden="true"></span>
+                <span class="titlebar-name">{{ .Site.Title }}</span>
+                <span class="titlebar-mark" aria-hidden="true"></span>
+            </div>
+            <div id="content">
+                {{ block "main" . }}{{ end }}
+            </div>
+            {{ partial "footer" . }}
+        </div>
     </div>
 </body>
 
