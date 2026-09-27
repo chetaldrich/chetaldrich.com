@@ -124,11 +124,16 @@
         return v < 0 ? 0 : v > 1 ? 1 : v;
     }
 
-    /* Deterministic hash, so nothing shimmers between frames. */
+    /* Deterministic hash, so nothing shimmers between frames. The final
+     * avalanche matters: the plain xor-shift below it leaves the top bit
+     * unset, which caps the result at 0.5 and confines every value derived
+     * from it to the left half of the picture. */
     function hash(x, y) {
-        var h = (x * 374761393 + y * 668265263) | 0;
-        h = (h ^ (h >> 13)) * 1274126177 | 0;
-        return ((h ^ (h >> 16)) >>> 0) / 4294967296;
+        var h = (Math.imul(x, 374761393) + Math.imul(y, 668265263)) | 0;
+        h = Math.imul(h ^ (h >>> 15), 2246822519);
+        h = Math.imul(h ^ (h >>> 13), 3266489917);
+        h ^= h >>> 16;
+        return (h >>> 0) / 4294967296;
     }
 
     /* Small seeded generator, for deciding where the trees go. */
@@ -272,9 +277,9 @@
         var r = rng(20240211);
         trees = [];
         var bands = [
-            { y: 0.82, step: 3, n: 40, dim: 0.24 },
-            { y: 0.93, step: 2, n: 24, dim: 0.13 },
-            { y: 1.08, step: 1, n: 12, dim: 0 }
+            { y: 0.8, step: 3, n: 44, dim: 0.24 },
+            { y: 0.9, step: 2, n: 26, dim: 0.13 },
+            { y: 1.04, step: 1, n: 16, dim: 0 }
         ];
         for (var bi = 0; bi < bands.length; bi++) {
             var band = bands[bi];
@@ -306,15 +311,23 @@
         /* Back to front, so the near trunks overlap the far ones. */
         trees.sort(function (a, b) { return a.foot - b.foot; });
 
-        /* Snow, falling through the band. */
+        /* Snow, falling through the band. Dense enough that the fall reads
+         * as one continuous sheet right across the frame rather than the
+         * odd flake dropping out of an empty sky. */
         flakes = [];
-        var n = Math.round(iw * ih / 240);
+        var n = Math.round(iw * ih / 110);
         for (var f = 0; f < n; f++) {
             flakes.push({
                 x: r() * iw,
                 y: r() * ih,
-                v: 5 + r() * 16,
+                /* Fast enough to cross the buffer in a couple of seconds,
+                 * so the eye keeps finding new flakes arriving. */
+                v: 16 + r() * 44,
                 d: 0.4 + r() * 1.5,
+                /* A steady wind off the ridge, so the snow runs the width
+                 * of the picture and wraps at whichever edge it reaches
+                 * instead of dropping straight down in place. */
+                w: 5 + r() * 15,
                 near: r()
             });
         }
@@ -329,7 +342,7 @@
         var thr = THRESH;
         var row = 0;
         var invHalo = 1 / (mr * 2.8);
-        var slopeTop = Math.round(ih * 0.8);
+        var slopeTop = Math.round(ih * 0.75);
 
         for (var y = 0; y < ih; y++) {
             var v = y / ih;
@@ -344,7 +357,7 @@
                 /* The top of the snow field drifts, rather than ruling a
                  * dead straight line across the picture. */
                 var snowLine = slopeTop +
-                    (sn(u * 2.7 + 0.2) * 0.6 + sn(u * 6.1 + 1.1) * 0.4) * ih * 0.04;
+                    (sn(u * 2.7 + 0.2) * 0.6 + sn(u * 6.1 + 1.1) * 0.4) * ih * 0.055;
                 var onSlope = y > snowLine;
                 var depth = onSlope ? (y - snowLine) / Math.max(1, ih - snowLine) : 0;
                 var L;
@@ -356,8 +369,8 @@
                     /* --- the snow field in front ------------------------ */
                     /* Picks up out of the shadow the ridge leaves behind
                      * instead of starting at full brightness. */
-                    var open = 0.6 + 0.28 * clamp01((y - snowLine) / (ih * 0.11));
-                    L = open - 0.08 * depth +
+                    var open = 0.66 + 0.24 * clamp01((y - snowLine) / (ih * 0.11));
+                    L = open - 0.06 * depth +
                         0.05 * sn(u * 3.1 + t * 0.004) +
                         0.035 * sn(u * 9.4 + 1.3) + halo * 0.3;
                 } else if (y < ridge[x]) {
@@ -390,13 +403,15 @@
                 } else {
                     /* --- the mountain ---------------------------------- */
                     var below = (y - ridge[x]) / Math.max(1, ih - ridge[x]);
-                    /* Snow takes the light along the top and falls into
-                     * shadow below, brightest on the moon's side. */
-                    var lit = 0.6 + 0.28 * falloff(x - mx, 1 / (iw * 0.55));
-                    L = lit * (1 - 0.5 * below) + halo * 0.5;
+                    /* Snow holds the light along the top and falls away
+                     * below. The moon only nudges the brightness either
+                     * side of that, so the field still reads as one sheet
+                     * of snow right across the frame. */
+                    var lit = 0.7 + 0.14 * falloff(x - mx, 1 / (iw * 0.55));
+                    L = lit * (1 - 0.42 * below) + halo * 0.4;
                     L += 0.045 * sn(u * 22 + t * 0.01) * (1 - below);
                     /* Cloud shadow crawling across the slope. */
-                    L -= 0.1 * falloff(below, 3) * (0.5 + 0.5 * sn(u * 2.2 + t * 0.008));
+                    L -= 0.08 * falloff(below, 3) * (0.5 + 0.5 * sn(u * 2.2 + t * 0.008));
                     useDeep = L < 0.5;
                 }
 
@@ -441,10 +456,18 @@
         for (var n = 0; n < flakes.length; n++) {
             var fl = flakes[n];
             fl.y += fl.v * dt;
-            fl.x += Math.sin(t * 0.8 + fl.d * 9) * fl.d * 5 * dt;
-            if (fl.y >= ih) { fl.y -= ih; fl.x = hash(n, (t * 37) | 0) * iw; }
-            if (fl.x < 0) fl.x += iw;
-            else if (fl.x >= iw) fl.x -= iw;
+            fl.x += (fl.w + Math.sin(t * 0.8 + fl.d * 9) * fl.d * 5) * dt;
+            if (fl.y >= ih) {
+                fl.y %= ih;
+                fl.x = hash(n, (t * 37) | 0) * iw;
+            }
+            /* Both axes wrap with a modulo rather than a single step, so a
+             * flake that travels more than the width of the buffer in one
+             * go — wind, or a long frame after the tab was put to sleep —
+             * comes back in at the far edge instead of dropping out of the
+             * picture for good. */
+            if (fl.x < 0) fl.x = (fl.x % iw + iw) % iw;
+            else if (fl.x >= iw) fl.x %= iw;
             var fx = fl.x | 0;
             var fy = fl.y | 0;
             if (fl.near > 0.84) {
