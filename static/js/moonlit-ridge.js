@@ -311,23 +311,23 @@
         /* Back to front, so the near trunks overlap the far ones. */
         trees.sort(function (a, b) { return a.foot - b.foot; });
 
-        /* Snow, falling through the band. Dense enough that the fall reads
-         * as one continuous sheet right across the frame rather than the
-         * odd flake dropping out of an empty sky. */
+        /* Snow, falling through the band. Sparse on purpose: a dense sheet
+         * stops reading as weather and starts reading as noise over the
+         * stars, and the ridge is the subject, not the fall. */
         flakes = [];
-        var n = Math.round(iw * ih / 110);
+        var n = Math.round(iw * ih / 460);
         for (var f = 0; f < n; f++) {
             flakes.push({
                 x: r() * iw,
                 y: r() * ih,
-                /* Fast enough to cross the buffer in a couple of seconds,
-                 * so the eye keeps finding new flakes arriving. */
-                v: 16 + r() * 44,
+                /* Slow. A flake should take its time getting down, so the
+                 * fall reads as drifting rather than as scrolling. */
+                v: 7 + r() * 15,
                 d: 0.4 + r() * 1.5,
                 /* A steady wind off the ridge, so the snow runs the width
                  * of the picture and wraps at whichever edge it reaches
                  * instead of dropping straight down in place. */
-                w: 5 + r() * 15,
+                w: 3 + r() * 9,
                 near: r()
             });
         }
