@@ -102,32 +102,10 @@ img {
     background: linear-gradient(to bottom, #070b16 0%, #0a1020 45%, #17263f 100%);
 }
 
-/* The bottom of the painting dissolves into the page in a handful of
- * posterised steps, so it never reads as a photograph with a caption
- * glued underneath it. */
-.hero::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 34%;
-    pointer-events: none;
-    background: linear-gradient(to bottom,
-        rgba(7, 11, 22, 0) 0%,
-        rgba(7, 11, 22, 0) 34%,
-        rgba(7, 11, 22, 0.1) 34%, rgba(7, 11, 22, 0.1) 42%,
-        rgba(7, 11, 22, 0.2) 42%, rgba(7, 11, 22, 0.2) 50%,
-        rgba(7, 11, 22, 0.3) 50%, rgba(7, 11, 22, 0.3) 58%,
-        rgba(7, 11, 22, 0.4) 58%, rgba(7, 11, 22, 0.4) 65%,
-        rgba(7, 11, 22, 0.5) 65%, rgba(7, 11, 22, 0.5) 72%,
-        rgba(7, 11, 22, 0.6) 72%, rgba(7, 11, 22, 0.6) 78%,
-        rgba(7, 11, 22, 0.7) 78%, rgba(7, 11, 22, 0.7) 84%,
-        rgba(7, 11, 22, 0.8) 84%, rgba(7, 11, 22, 0.8) 89%,
-        rgba(7, 11, 22, 0.9) 89%, rgba(7, 11, 22, 0.9) 94%,
-        rgba(7, 11, 22, 0.97) 94%, rgba(7, 11, 22, 0.97) 97%,
-        rgba(7, 11, 22, 1) 97%);
-}
+/* The bottom of the painting dissolves into the page, but the scene draws
+ * that dissolve itself, in the same ordered dither as the rest of the
+ * picture. An overlay gradient down here would have to step, and its steps
+ * read as ruled lines straight across the snow. */
 
 .masthead {
     padding: 34px 0 22px;

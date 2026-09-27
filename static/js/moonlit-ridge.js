@@ -52,7 +52,9 @@
      * over from the main one below half tone, and its top step is the same
      * colour the main ramp reaches there, so the handover is invisible. */
     var SHADE_RGB = [
-        [8, 16, 15],
+        /* The bottom step is the page colour, so the dissolve at the foot of
+         * the picture bottoms out on it exactly and leaves no seam. */
+        RGB[0],
         [15, 28, 24],
         [24, 44, 36],
         [38, 64, 54],
@@ -147,81 +149,121 @@
     }
 
     /* ---------------------------------------------------------------- *
-     * Spruces. Three variants, drawn once into tiny buffers so each one
-     * keeps hard pixel edges: 0 = sky, 1 = timber, 2 = snow.
+     * Spruces. Three variants at each of the sizes the depth bands use,
+     * drawn once into tiny buffers so each one keeps hard pixel edges:
+     * 0 = sky, 1 = timber, 2 = snow.
+     *
+     * The shape is laid out in fractions of the buffer rather than in
+     * pixels of one fixed size, and every size gets its own rasterisation.
+     * Shrinking a finished tree by sampling every other pixel does not
+     * work: the boughs are mostly thin, so a sampled-down spruce loses
+     * everything but the trunk and comes out as a bare post.
      * ---------------------------------------------------------------- */
 
     var SW = 26;
     var SH = 36;
-    var SPRUCE = [];
+    var SPRUCES = {};
 
-    function drawSpruce(variant) {
-        var c = document.createElement("canvas");
-        c.width = SW;
-        c.height = SH;
-        var g = c.getContext("2d");
-        var r = rng(variant * 7919 + 13);
-        var cx = (SW / 2) | 0;
+    function spruce(div, variant) {
+        var key = div + ":" + variant;
+        if (SPRUCES[key]) return SPRUCES[key];
 
-        g.fillStyle = "#000";
-        g.beginPath();
-        g.moveTo(cx - 1, SH);
-        g.lineTo(cx - 1, 5);
-        g.lineTo(cx + 1, 5);
-        g.lineTo(cx + 1, SH);
-        g.closePath();
-        g.fill();
+        var w = Math.max(5, Math.round(SW / div));
+        var h = Math.max(8, Math.round(SH / div));
+        var r = rng(variant * 7919 + Math.round(div * 1000) + 13);
+        var cx = w / 2;
 
-        /* Tiers, widest at the bottom, each with snow lying along it. */
-        var tiers = 7;
+        /* Timber and snow are collected as separate lists of polygons and
+         * filled one material at a time, because a single pass cannot tell
+         * them apart where they meet: every pixel on that seam is a blend of
+         * the two, and a tree is mostly seam at the smaller sizes. Filling
+         * them separately gives each its own coverage to be tested against,
+         * so the join costs a hard edge instead of a row of holes. */
+        var timber = [];
+        var snow = [];
+
+        /* The trunk only runs up to where the boughs are already wider than
+         * it is. Any higher and it stands out above the foliage as a bare
+         * post, which is exactly what a spruce does not look like. */
+        var trunkW = Math.max(1, Math.round(w * 0.07));
+        var trunkX = Math.round(cx - trunkW / 2);
+        /* The trunk starts level with the leader, not above it: any higher
+         * and it stands out above the foliage as a bare post. */
+        var trunkY = Math.round(h * 0.05);
+        timber.push([trunkX, trunkY, trunkX, h, trunkX + trunkW, h, trunkX + trunkW, trunkY, 1]);
+
+        /* Tiers, widest at the bottom, each with snow lying along it. A bough
+         * every three rows or so: any fewer and the ones that are left sit
+         * too far apart to read as tiers rather than as blobs on a stick. */
+        var tiers = Math.max(4, Math.round(h / 3));
+        var top0 = h * 0.94;
+        var top1 = h * 0.05;
+        var halfMax = w / 2 - 0.6;
+        /* Only just deep enough to reach the tier below. A deeper bough
+         * spreads the same width over too many rows and the tree goes back
+         * to being a spike with a spike on it. */
+        var drop = (top0 - top1) / tiers * 1.1;
+        /* The sliver of snow along a bough has to be a whole pixel at the
+         * smaller sizes or it rounds away to nothing. */
+        var band = Math.max(0.7, h * 0.024);
+
         for (var i = 0; i < tiers; i++) {
             var t = i / (tiers - 1);
-            var top = SH - 5 - t * (SH - 11);
-            var half = (SW / 2 - 1.5) * (1 - t * 0.84) * (0.92 + r() * 0.16);
-            var drop = 6.5 + t * 1.5;
+            var top = top0 - t * (top0 - top1);
+            /* Linear, but never down to nothing: the leader is a bough like
+             * any other, a pixel or two across, not a needle. */
+            var half = halfMax * (0.16 + 0.84 * (1 - t)) * (0.82 + r() * 0.36);
+            var d = drop + t * h * 0.03;
 
-            g.fillStyle = "#000";
-            g.beginPath();
-            g.moveTo(cx, top);
-            g.lineTo(cx - half, top + drop);
-            g.lineTo(cx + half, top + drop);
-            g.closePath();
-            g.fill();
+            timber.push([cx, top, cx - half, top + d, cx + half, top + d, cx, top, 0]);
 
             /* Snow lies along the top of each bough, so the white runs back
              * from the tip towards the trunk and leaves the timber showing
              * underneath. */
-            g.fillStyle = "#fff";
-            g.beginPath();
-            g.moveTo(cx, top + 0.5);
-            g.lineTo(cx - half * 0.98, top + drop);
-            g.lineTo(cx - half * 0.55, top + drop - 0.5);
-            g.lineTo(cx, top + 1.6);
-            g.closePath();
-            g.fill();
-            g.beginPath();
-            g.moveTo(cx, top + 0.5);
-            g.lineTo(cx + half * 0.98, top + drop);
-            g.lineTo(cx + half * 0.55, top + drop - 0.5);
-            g.lineTo(cx, top + 1.6);
-            g.closePath();
-            g.fill();
+            var a = top + band * 0.8;
+            var b = top + band * 1.1;
+            var e = top + d - band * 1.4;
+            snow.push([cx, a, cx - half * 0.9, top + d, cx - half * 0.45, e, cx, b, 0]);
+            snow.push([cx, a, cx + half * 0.9, top + d, cx + half * 0.45, e, cx, b, 0]);
         }
 
-        var d = g.getImageData(0, 0, SW, SH).data;
-        var buf = new Uint8Array(SW * SH);
-        for (var k = 0; k < buf.length; k++) {
-            /* Untouched pixels are transparent black, so alpha decides
-             * what is sky and what is tree. */
-            if (d[k * 4 + 3] < 128) continue;
-            var l = d[k * 4];
-            if (l < 96) buf[k] = 1;
-            else if (l > 160) buf[k] = 2;
+        var c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        var g = c.getContext("2d");
+        var buf = new Uint8Array(w * h);
+
+        for (var pass = 0; pass < 2; pass++) {
+            var list = pass ? snow : timber;
+            g.clearRect(0, 0, w, h);
+            g.fillStyle = "#000";
+            for (var p = 0; p < list.length; p++) {
+                var q = list[p];
+                if (q[8]) {
+                    g.fillRect(q[0], q[1], q[2] - q[0], q[5] - q[1]);
+                    continue;
+                }
+                g.beginPath();
+                g.moveTo(q[0], q[1]);
+                g.lineTo(q[2], q[3]);
+                g.lineTo(q[4], q[5]);
+                g.lineTo(q[6], q[7]);
+                g.closePath();
+                g.fill();
+            }
+            /* Untouched pixels are transparent, so alpha decides what is sky
+             * and what is tree. Snow goes down last and wins the overlap. */
+            var d2 = g.getImageData(0, 0, w, h).data;
+            for (var k = 0; k < buf.length; k++) {
+                if (d2[k * 4 + 3] < 128) continue;
+                buf[k] = pass ? 2 : 1;
+            }
         }
-        return buf;
+
+        var spr = { buf: buf, w: w, h: h };
+        SPRUCES[key] = spr;
+        return spr;
     }
-
-    for (var v = 0; v < 3; v++) SPRUCE.push(drawSpruce(v));
 
     /* ---------------------------------------------------------------- *
      * Buffer and layout
@@ -237,8 +279,26 @@
     var my = 0;
     var mr = 0;      /* moon radius                          */
     var ridge = [];  /* the skyline, one entry per column    */
+    var fadeRow = 0; /* first row of the dissolve            */
     var trees = [];
     var flakes = [];
+
+    /* Where the snow field is cut off by the slope in front of it. It
+     * drifts, rather than ruling a dead straight line across the picture.
+     * Both the field itself and the treeline are read off this, so the two
+     * cannot disagree about where the ground is. */
+    function snowLineAt(u) {
+        return ih * 0.72 +
+            (sn(u * 2.7 + 0.2) * 0.6 + sn(u * 6.1 + 1.1) * 0.4) * ih * 0.05;
+    }
+
+    /* The ground the spruces stand on: the same contour, a little way down
+     * its face, with a slower swell and some finer wobble on top so no two
+     * neighbouring trunks end up at quite the same height. */
+    function treeGroundAt(u) {
+        return snowLineAt(u) + ih * 0.03 +
+            ih * 0.015 * sn(u * 1.9 + 0.5) + ih * 0.008 * sn(u * 8.7 + 2.1);
+    }
 
     function layout() {
         var w = host.clientWidth;
@@ -272,20 +332,36 @@
                 ih * 0.012 * sn(u * 7.3) + ih * 0.008 * sn(u * 19.1 + 0.3);
         }
 
-        /* Spruces in three depth bands: small and hazy at the back of the
-         * slope, dark and full size in front. */
+        /* Spruces in three depth bands, every one of them standing on that
+         * ground: the treeline runs along the top of the field and then
+         * steps down the slope towards the viewer, and each band sits on the
+         * same contour as the one behind it rather than on a flat row of its
+         * own. All of it stays above the dissolve, so the darkening at the
+         * foot of the picture has nothing to cut through. Small and hazy at
+         * the back, dark and full size in front. */
         var r = rng(20240211);
         trees = [];
         var bands = [
-            { y: 0.8, step: 3, n: 44, dim: 0.24 },
-            { y: 0.9, step: 2, n: 26, dim: 0.13 },
-            { y: 1.04, step: 1, n: 16, dim: 0 }
+            { drop: 0, div: 3, per: 0.094, dim: 0.26 },
+            { drop: 0.024, div: 2, per: 0.056, dim: 0.14 },
+            { drop: 0.05, div: 1.45, per: 0.035, dim: 0 }
         ];
         for (var bi = 0; bi < bands.length; bi++) {
             var band = bands[bi];
-            for (var i = 0; i < band.n; i++) {
-                var foot = Math.min(ih - 1, ih * band.y + (r() - 0.5) * ih * 0.04);
-                var tx = Math.round(r() * (iw + 24) - 12 - (SW / band.step) * 0.5);
+            /* Per column, not a fixed count: a treeline that thins out with
+             * the window is the wrong way round. */
+            var count = Math.max(5, Math.round(iw * band.per));
+            for (var i = 0; i < count; i++) {
+                var spr = spruce(band.div, (r() * 3) | 0);
+                /* Jitter first, so the ground is read at the trunk's own
+                 * column and the scatter follows the contour with it. */
+                var tu = r();
+                var foot = treeGroundAt(tu) + ih * band.drop + (r() - 0.5) * ih * 0.022;
+
+
+                /* Bleed off either edge, but never so far that the tree is a
+                 * single column of pixels against the margin. */
+                var tx = Math.round(r() * (iw + spr.w - 3) - (spr.w - 3) * 0.5);
                 /* Each tree carries its own four-step green, washed towards
                  * the haze by however far back it stands. */
                 var wash = Math.min(0.55, band.dim * 1.6);
@@ -298,10 +374,11 @@
                         c3[2] + (136 - c3[2]) * wash);
                 }
                 trees.push({
-                    buf: SPRUCE[(r() * 3) | 0],
-                    step: band.step,
+                    buf: spr.buf,
+                    w: spr.w,
+                    h: spr.h,
                     x: tx,
-                    y: Math.round(foot - SH / band.step),
+                    y: Math.round(foot - spr.h),
                     foot: foot,
                     dim: band.dim,
                     ramp: ramp
@@ -310,6 +387,15 @@
         }
         /* Back to front, so the near trunks overlap the far ones. */
         trees.sort(function (a, b) { return a.foot - b.foot; });
+
+        /* Where the picture falls away into the page, kept below every trunk
+         * so the darkening never has a tree to cut through. */
+        fadeRow = Math.round(ih * 0.875);
+        for (var ti = 0; ti < trees.length; ti++) {
+            var low = Math.round(trees[ti].foot) + 2;
+            if (low > fadeRow) fadeRow = low;
+        }
+        if (fadeRow > ih - 6) fadeRow = ih - 6;
 
         /* Snow, falling through the band. Sparse on purpose: a dense sheet
          * stops reading as weather and starts reading as noise over the
@@ -337,12 +423,39 @@
      * Frame
      * ---------------------------------------------------------------- */
 
+    var litCol = null;
+
+    /* How far the picture has fallen into the page at this pixel, zero to
+     * one. Eased, so the dissolve does not begin with a step of its own, and
+     * with a drifting edge for the same reason the field and the skyline
+     * have one: a boundary between two tones that runs dead straight across
+     * the frame is the one thing in a picture like this that reads as a
+     * ruled line rather than as a dither. */
+    function fadeAt(x, y) {
+        var u = x / iw;
+        var edge = fadeRow +
+            (sn(u * 3.1 + 0.4) * 0.6 + sn(u * 7.3 + 2.2) * 0.4) * ih * 0.03;
+        if (y < edge) return 0;
+        var f = (y - edge) / Math.max(1, ih - 1 - fadeRow);
+        if (f > 1) f = 1;
+        return f * f * (3 - 2 * f);
+    }
+
     function render(t, dt) {
         var data = px32;
         var thr = THRESH;
         var row = 0;
         var invHalo = 1 / (mr * 2.8);
-        var slopeTop = Math.round(ih * 0.75);
+
+        /* Snow holds the light along the top of the ridge and falls away
+         * below; the moon only nudges the brightness either side of that, so
+         * the whole sheet reads as one piece of snow right across the frame.
+         * One value per column, shared by the mountain and the field, is
+         * also what keeps the join between the two from showing as a line. */
+        if (!litCol || litCol.length !== iw) litCol = new Float32Array(iw);
+        for (var lx = 0; lx < iw; lx++) {
+            litCol[lx] = 0.7 + 0.14 * falloff(lx - mx, 1 / (iw * 0.55));
+        }
 
         for (var y = 0; y < ih; y++) {
             var v = y / ih;
@@ -356,23 +469,38 @@
                 var halo = 0.3 * falloff(dr, invHalo);
                 /* The top of the snow field drifts, rather than ruling a
                  * dead straight line across the picture. */
-                var snowLine = slopeTop +
-                    (sn(u * 2.7 + 0.2) * 0.6 + sn(u * 6.1 + 1.1) * 0.4) * ih * 0.055;
+                var snowLine = snowLineAt(u);
                 var onSlope = y > snowLine;
                 var depth = onSlope ? (y - snowLine) / Math.max(1, ih - snowLine) : 0;
                 var L;
                 /* The lower slopes fall into pine shadow; above half tone
                  * the picture is snow and sky again. */
                 var useDeep = false;
+                /* A little noise under the threshold. Any smooth ramp long
+                 * enough to cross a palette step does it along contours, and
+                 * those contours come out as ruled lines once the dither has
+                 * only two colours to work with; the noise breaks them into
+                 * the same stipple as everything else. */
+                var grain = (hash(x, y) - 0.5) * 0.05;
 
                 if (onSlope) {
                     /* --- the snow field in front ------------------------ */
-                    /* Picks up out of the shadow the ridge leaves behind
-                     * instead of starting at full brightness. */
-                    var open = 0.66 + 0.24 * clamp01((y - snowLine) / (ih * 0.11));
-                    L = open - 0.06 * depth +
-                        0.05 * sn(u * 3.1 + t * 0.004) +
-                        0.035 * sn(u * 9.4 + 1.3) + halo * 0.3;
+                    /* The same sheet the mountain is made of, carried on
+                     * downhill: it takes the lit column where the ridge left
+                     * it, so the two meet without a seam, and gives up more
+                     * light with every row towards the viewer. That falloff
+                     * is what puts the treeline against something brighter
+                     * than itself, and it carries the front of the field far
+                     * enough down the pine ramp to pick up the shadow the
+                     * wood casts across it. */
+                    L = litCol[x] * (1 - 0.34 * depth) +
+                        0.03 * clamp01((y - snowLine) / (ih * 0.16)) +
+                        /* Drifting across the slope, not ruling it: the waves
+                         * carry a term in v as well as u. */
+                        0.05 * sn(u * 2.6 + v * 1.1 + t * 0.004) +
+                        0.035 * sn(u * 5.3 - v * 1.7 + 1.3) +
+                        grain + halo * 0.3;
+                    useDeep = L < 0.5;
                 } else if (y < ridge[x]) {
                     /* --- sky ------------------------------------------- */
                     /* Deep overhead, opening out towards the ridge. */
@@ -403,17 +531,19 @@
                 } else {
                     /* --- the mountain ---------------------------------- */
                     var below = (y - ridge[x]) / Math.max(1, ih - ridge[x]);
-                    /* Snow holds the light along the top and falls away
-                     * below. The moon only nudges the brightness either
-                     * side of that, so the field still reads as one sheet
-                     * of snow right across the frame. */
-                    var lit = 0.7 + 0.14 * falloff(x - mx, 1 / (iw * 0.55));
-                    L = lit * (1 - 0.42 * below) + halo * 0.4;
-                    L += 0.045 * sn(u * 22 + t * 0.01) * (1 - below);
+                    L = litCol[x] * (1 - 0.42 * below) + halo * 0.4;
+                    L += 0.045 * sn(u * 13 + v * 8 + t * 0.01) * (1 - below);
                     /* Cloud shadow crawling across the slope. */
                     L -= 0.08 * falloff(below, 3) * (0.5 + 0.5 * sn(u * 2.2 + t * 0.008));
+                    L += grain;
                     useDeep = L < 0.5;
                 }
+
+                /* The foot of the picture dissolves into the page. Doing it
+                 * here, through the same ordered dither as everything else,
+                 * is what keeps it from reading as a stack of ruled bands
+                 * laid over the snow. */
+                L *= 1 - fadeAt(x, y);
 
                 data[row] = useDeep ? shadeDeep(L, thr[(x & 7) | dithRow])
                     : shade(L, thr[(x & 7) | dithRow]);
@@ -424,26 +554,27 @@
         for (var k = 0; k < trees.length; k++) {
             var tr = trees[k];
             var buf = tr.buf;
-            var step = tr.step;
-            var th = (SH / step) | 0;
-            var tw = (SW / step) | 0;
-            for (var ty = 0; ty < th; ty++) {
+            for (var ty = 0; ty < tr.h; ty++) {
                 var py = tr.y + ty;
                 if (py < 0 || py >= ih) continue;
-                var src = (ty * step) * SW;
+                var src = ty * tr.w;
                 var dithY = (py & 7) << 3;
-                for (var tx = 0; tx < tw; tx++) {
+                for (var tx = 0; tx < tr.w; tx++) {
                     var px = tr.x + tx;
                     if (px < 0 || px >= iw) continue;
-                    var s = buf[src + tx * step];
+                    var s = buf[src + tx];
                     if (!s) continue;
+                    /* Should a trunk reach the dissolve — the drifting edge
+                     * can climb a little past the lowest foot — its base goes
+                     * into the page with the snow. */
+                    var tFade = fadeAt(px, py);
                     if (s === 2) {
                         /* Snow on the boughs still reflects the sky. */
-                        var snowTone = 0.94 - tr.dim * 0.7;
-                        if (snowTone < 0.4) snowTone = 0.4;
+                        var snowTone = (0.94 - tr.dim * 0.7) * (1 - tFade);
+                        if (snowTone < 0.4 && tFade < 0.55) snowTone = 0.4;
                         data[py * iw + px] = shade(snowTone, thr[(px & 7) | dithY]);
                     } else {
-                        var tone = 0.34 + tr.dim * 0.5;
+                        var tone = (0.34 + tr.dim * 0.5) * (1 - tFade);
                         var ti = (tone * tr.ramp.length + thr[(px & 7) | dithY]) | 0;
                         if (ti > tr.ramp.length - 1) ti = tr.ramp.length - 1;
                         data[py * iw + px] = tr.ramp[ti];
@@ -470,11 +601,21 @@
             else if (fl.x >= iw) fl.x %= iw;
             var fx = fl.x | 0;
             var fy = fl.y | 0;
+            /* A flake falls into the dissolve along with everything else,
+             * rather than staying a bright speck on top of it. */
+            var fTone = 1 - fadeAt(fx, fy);
+            if (fTone <= 0) continue;
+            var fyDith = (fy & 7) << 3;
             if (fl.near > 0.84) {
-                if (fx + 1 < iw) data[fy * iw + fx + 1] = PAL[LAST];
-                if (fy + 1 < ih) data[(fy + 1) * iw + fx] = PAL[LAST];
+                if (fx + 1 < iw) {
+                    data[fy * iw + fx + 1] = shade(fTone, thr[((fx + 1) & 7) | fyDith]);
+                }
+                if (fy + 1 < ih) {
+                    data[(fy + 1) * iw + fx] =
+                        shade(1 - fadeAt(fx, fy + 1), thr[(fx & 7) | (((fy + 1) & 7) << 3)]);
+                }
             }
-            data[fy * iw + fx] = PAL[LAST];
+            data[fy * iw + fx] = shade(fTone, thr[(fx & 7) | fyDith]);
         }
 
         ctx.putImageData(img, 0, 0);
