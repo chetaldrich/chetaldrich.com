@@ -10,10 +10,22 @@
     --void: #070b16;
     --dither: rgba(168, 194, 222, 0.5);
     --dim: rgba(200, 219, 238, 0.62);
-    --font-ui: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
-              "Liberation Mono", monospace;
-    --font-prose: "Iowan Old Style", "Palatino Linotype", Palatino,
-                  "Book Antiqua", Georgia, "Times New Roman", serif;
+    /* No webfonts: the site ships no font files, so both stacks are built
+     * to land on a face that is actually installed rather than one that is
+     * merely first in the list.
+     *
+     * No single monospace ships on every desktop OS, so the `ui-monospace`
+     * keyword leads: it resolves to the system's own mono (SF Mono on
+     * macOS, Consolas on Windows, Roboto Mono on Android). The named faces
+     * behind it are belt-and-braces for wherever that resolves to nothing. */
+    --font-ui: ui-monospace, "SF Mono", Menlo, Consolas,
+              "Liberation Mono", "DejaVu Sans Mono", monospace;
+    /* Iowan Old Style is macOS-only, and the old Palatino / Book Antiqua
+     * entries were near-duplicates that exist on one platform each, so they
+     * bought variance rather than coverage. Georgia ships identically on
+     * macOS and Windows and was drawn for screen at small sizes, which
+     * makes it the one fallback worth naming. */
+    --font-prose: "Iowan Old Style", Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -33,7 +45,6 @@ body {
     min-height: 100%;
     color: var(--ink);
     background: var(--void);
-    cursor: crosshair;
 }
 
 a {
@@ -146,45 +157,48 @@ img {
 }
 
 /* ------------------------------------------------------------------ *
- * Content: it starts up inside the painting and comes out of it
+ * Content: it lives below the painting, on the void
+ *
+ * The hero's own bottom dissolve already carries the eye down into the
+ * page, so the content starts where the painting ends and needs no
+ * scrim, no frame, and no overlap to justify either.
  * ------------------------------------------------------------------ */
 
 .screen {
     position: relative;
     width: 100%;
     max-width: 640px;
-    margin: -7vh auto 0;
-    /* Just enough scrim to read, thinning out as the painting drops away. */
-    background: linear-gradient(to bottom,
-        rgba(7, 11, 22, 0.72) 0%, rgba(7, 11, 22, 0) 190px);
-    /* The window's edges, drawn on but fading in as they rise out of the
-     * scene: no top rule, so nothing caps the painting off. */
-    border: 1px solid transparent;
-    border-image: linear-gradient(to bottom,
-        transparent 0%, var(--dither) 9%, var(--dither) 100%) 1;
+    margin: 0 auto;
 }
 
 /* ------------------------------------------------------------------ *
- * Window chrome
+ * Marginalia
+ *
+ * Two small letterspaced labels, set in the prose serif rather than the
+ * mono. The gesture — small caps, wide tracking, a dither rule — is the
+ * same one a terminal titlebar makes, but the face tips it toward a book
+ * or a map legend, which is what the painting above wants.
  * ------------------------------------------------------------------ */
 
 .titlebar {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 10px;
-    border-bottom: 1px solid var(--dither);
-    font-family: var(--font-ui);
-    font-size: 10px;
-    letter-spacing: 0.22em;
+    justify-content: center;
+    gap: 14px;
+    padding: 30px 0 26px;
+    font-family: var(--font-prose);
+    font-size: 13px;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--dim);
 }
 
-/* 50% ordered dither, drawn as a checkerboard of 2px cells. */
+/* 50% ordered dither, drawn as a checkerboard of 2px cells. Kept short
+ * so it ornaments the label instead of ruling a line across the page. */
 .titlebar-mark {
-    flex: 1;
+    width: 28px;
     height: 5px;
+    flex: none;
     background-image: repeating-conic-gradient(var(--dither) 0% 25%, transparent 0% 50%);
     background-size: 2px 2px;
 }
@@ -219,10 +233,10 @@ h1 {
 }
 
 h2 {
-    font-family: var(--font-ui);
-    font-size: 11px;
+    font-family: var(--font-prose);
+    font-size: 13px;
     font-weight: 400;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--dim);
     margin: 0 0 14px;
@@ -234,8 +248,11 @@ h2 {
  * Experience
  * ------------------------------------------------------------------ */
 
+/* The gap below the intro used to be staged: 20px of padding on the last
+ * paragraph plus 26px of margin here, both applied by the entrance
+ * animation's own rules. With the animation gone they are one number. */
 .experience {
-    margin-top: 0;
+    margin-top: 46px;
 }
 
 .resume-link {
@@ -252,19 +269,16 @@ h2 {
     border-bottom: 0;
 }
 
+/* The wordmarks used to be SVG logos run through invert+grayscale, which
+ * left them as small white pictures of text — carrying none of the brand
+ * colour, none of the brand letterforms, and none of the accessibility or
+ * selectability of actual text. Setting the name in the prose serif keeps
+ * the same visual weight and lets the type match the rest of the page. */
 .company-name {
     display: block;
     margin-bottom: 4px;
-}
-
-.company-logo {
-    height: 18px;
-    width: auto;
-    display: inline;
-    vertical-align: middle;
-    /* The logos are dark colour artwork; invert them to moonlight. */
-    filter: invert(1) grayscale(1) contrast(1.15);
-    opacity: 0.88;
+    font-size: 17px;
+    line-height: 1.3;
 }
 
 .cv-roles {
@@ -293,120 +307,6 @@ h2 {
 }
 
 /* ------------------------------------------------------------------ *
- * Status bar
- * ------------------------------------------------------------------ */
-
-.statusbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 12px;
-    border-top: 1px solid var(--dither);
-    font-family: var(--font-ui);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--dim);
-}
-
-.statusbar-led {
-    width: 6px;
-    height: 6px;
-    background: var(--ink);
-    animation: led 2.4s steps(1, end) infinite;
-}
-
-@keyframes led {
-    0%, 60% { opacity: 1; }
-    61%, 100% { opacity: 0.15; }
-}
-
-.statusbar-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.statusbar-caret {
-    width: 6px;
-    height: 10px;
-    background: var(--ink);
-    animation: blink 1.1s steps(1, end) infinite;
-}
-
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-}
-
-/* ------------------------------------------------------------------ *
- * Staged entrance
- * ------------------------------------------------------------------ */
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.home .titlebar {
-    opacity: 0;
-    animation: fadeIn 0.5s ease 0.8s forwards;
-}
-
-.home #content > p {
-    opacity: 0;
-    transform: translateY(12px);
-    animation: fadeInUp 0.6s ease 1.6s forwards;
-}
-
-.home #content > p:nth-of-type(2) { animation-delay: 1.9s; }
-.home #content > p:nth-of-type(3) { animation-delay: 2.2s; }
-.home #content > p:nth-of-type(4) { animation-delay: 2.5s; }
-
-.home #content > p:last-of-type {
-    padding-bottom: 20px;
-}
-
-.home .experience {
-    opacity: 0;
-    margin-top: 26px;
-    animation: fadeInUp 0.6s ease 3.1s forwards;
-}
-
-.home .statusbar {
-    opacity: 0;
-    animation: fadeIn 0.5s ease 3.7s forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .home .titlebar,
-    .home #content > p,
-    .home .experience,
-    .home .statusbar {
-        opacity: 1;
-        transform: none;
-        animation: none;
-    }
-
-    .statusbar-led,
-    .statusbar-caret {
-        animation: none;
-    }
-}
-
-/* ------------------------------------------------------------------ *
  * Narrow screens: the gutters close up, so the sea is only visible
  * above and below the window.
  * ------------------------------------------------------------------ */
@@ -420,10 +320,6 @@ h2 {
         height: 34vh;
         min-height: 200px;
         margin: 0 -14px;
-    }
-
-    .screen {
-        margin-top: -4vh;
     }
 
     #content {

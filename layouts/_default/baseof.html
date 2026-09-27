@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+<html lang="{{ .Site.Language.Locale | default "en-us" }}">
 
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,6 @@
             <div id="content">
                 {{ block "main" . }}{{ end }}
             </div>
-            {{ partial "footer" . }}
         </div>
     </div>
 </body>
