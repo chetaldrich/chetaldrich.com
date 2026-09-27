@@ -93,8 +93,8 @@ img {
 
 .hero {
     position: relative;
-    height: 44vh;
-    min-height: 260px;
+    height: 35vh;
+    min-height: 205px;
     overflow: hidden;
     margin: 0 -20px;
     /* What shows before (or without) the scene: a plausible sky, so the
@@ -295,8 +295,8 @@ h2 {
     }
 
     .hero {
-        height: 34vh;
-        min-height: 200px;
+        height: 26vh;
+        min-height: 158px;
         margin: 0 -14px;
     }
 
