@@ -10,7 +10,7 @@
  * A season supplies everything that changes with the calendar: the palette,
  * what covers the ground, what kind of trees stand on it, what falls out of
  * the sky, and where the picture dissolves to. Add a season by adding an
- * entry to SEASONS; the calendar mapping lives in the inline script in
+ * entry to THEMES; the calendar mapping lives in the inline script in
  * layouts/_default/baseof.html.
  */
 (function () {
@@ -195,7 +195,7 @@
             disc: { x: 0.84, y: 0.2, r: 0.085, halo: 0.3, spread: 2.8, rim: 0.7 },
             sky: { base: 0.05, range: 0.48, power: 1.5, halo: 0.7, stars: true },
             mountain: { lit: 1, depth: 0.42, halo: 0.4, wave: 1 },
-            field: { lit: 1, depth: 0.34, lift: 0.03, halo: 0.3, litter: 0 },
+            field: { lit: 1, depth: 0.34, lift: 0.03, halo: 0.3 },
             trees: {
                 kinds: ["spruce"],
                 ramps: { spruce: [WINTER_TIMBER] },
@@ -218,7 +218,7 @@
             palette: ramp(AUTUMN_RGB),
             /* The dark half in autumn is ground, not pine: dark green
              * through olive and ochre to the russet the main ramp shares
-             * at mid-tone. The field lives here, patchy with leaf litter. */
+             * at mid-tone. The field lives here. */
             shadow: ramp([
                 AUTUMN_RGB[0],
                 [30, 38, 30],
@@ -238,15 +238,13 @@
              * and halo were left high, so both stay low: the ridge keeps
              * its olive and russet silhouette and the sun sits behind it. */
             mountain: { lit: 0.46, depth: 0.5, halo: 0.18, wave: 1.1 },
-            /* Ground under leaf litter, not snow: dimmed so it lands in
-             * the shadow ramp's greens and browns, with sparse fallen
-             * leaves as single pixels on top. The sun's share is kept
+            /* Plain green ground, not snow: dimmed so it lands in the
+             * shadow ramp's greens and browns. The sun's share is kept
              * small so the lit field does not detach from the dark ridge
              * as a pale wedge; it should read as the same ground, shading
              * off down the slope before the dissolve takes it up to the
-             * paper page. The litter thins toward the sun, where lit
-             * ground makes it read as dust. */
-            field: { lit: 0.5, depth: 0.45, lift: 0.02, halo: 0.12, litter: 0.09 },
+             * paper page. */
+            field: { lit: 0.5, depth: 0.45, lift: 0.02, halo: 0.12 },
             trees: {
                 kinds: ["broadleaf"],
                 ramps: {
@@ -262,8 +260,7 @@
                 haze: [236, 190, 130],
                 bark: AUTUMN_BARK
             },
-            /* Nothing falls from the autumn sky; the leaves stay on the
-             * ground, where the field's litter already puts them. */
+            /* Nothing falls from the autumn sky. */
             particles: null
         }
     };
@@ -797,23 +794,6 @@
                         0.05 * sn(u * 2.6 + v * 1.1 + t * 0.004) +
                         0.035 * sn(u * 5.3 - v * 1.7 + 1.3) +
                         grain + halo * theme.field.halo;
-                    /* Fallen leaves: only an occasional single pixel lifts
-                     * towards russet and gold, scattered at full resolution
-                     * rather than in patches. The chance thins toward the
-                     * sun, where sunlit ground makes the same speckle read
-                     * far heavier. The lift varies with the hash, so the
-                     * same speckle lands on ochre, russet or peach depending
-                     * on the draw. Winter keeps this at zero to stay a clean
-                     * snow sheet. */
-                    if (theme.field.litter) {
-                        var leaf = hash(x, y);
-                        var density = theme.field.litter *
-                            (1 - 0.7 * falloff(dr, invHalo));
-                        var cut = 1 - density;
-                        if (leaf > cut) {
-                            L += 0.1 + ((leaf - cut) / density) * 0.1;
-                        }
-                    }
                     useDeep = L < 0.5;
                 } else if (y < ridge[x]) {
                     /* --- sky ------------------------------------------- */
