@@ -193,7 +193,7 @@
             fadeTo: 0,
             light: { base: 0.7, gain: 0.14, width: 0.55 },
             disc: { x: 0.84, y: 0.2, r: 0.085, halo: 0.3, spread: 2.8, rim: 0.7 },
-            sky: { base: 0.05, range: 0.48, power: 1.5, halo: 0.7, stars: true },
+            sky: { base: 0.05, range: 0.48, power: 1.5, halo: 0.7, stars: true, bridge: 0 },
             mountain: { lit: 1, depth: 0.42, halo: 0.4, wave: 1 },
             field: { lit: 1, depth: 0.34, lift: 0.03, halo: 0.3 },
             trees: {
@@ -202,7 +202,8 @@
                 tone: { spruce: [0.34, 0.5] },
                 cap: { spruce: [0.94, 0.7] },
                 capFloor: { spruce: 0.4 },
-                haze: [66, 98, 136]
+                haze: [66, 98, 136],
+                hazeWash: [0.55, 1.6]
             },
             particles: {
                 density: 460,
@@ -227,24 +228,50 @@
                 AUTUMN_RGB[4]
             ]),
             seed: 20260922,
-            /* Daylight fades up into the paper-coloured page. */
+            /* Daylight fades up into the paper-coloured page. The fade
+             * walks a ground-only ramp, not the main palette: the main
+             * ramp would pass through the sky's plums and sands and lay
+             * a band of weather across the foot of the picture. Its first
+             * steps are the shadow ramp's own, so the slope enters the
+             * dissolve without a seam, and the extra steps climb through
+             * sage and bone to the page. */
             fadeTo: 1,
+            fade: ramp([
+                AUTUMN_RGB[0],
+                [30, 38, 30],
+                [52, 52, 28],
+                [84, 68, 30],
+                [118, 108, 70],
+                [156, 144, 106],
+                [200, 186, 152],
+                AUTUMN_RGB[7]
+            ]),
             light: { base: 0.7, gain: 0.16, width: 0.5 },
             /* A low sun in the left shoulder, almost touching the ridge. */
             disc: { x: 0.2, y: 0.47, r: 0.07, halo: 0.55, spread: 4.2, rim: 0.88 },
-            sky: { base: 0.1, range: 0.95, power: 1.15, halo: 0.7, stars: false },
+            /* Twilight continuum: the ridge itself never leaves the shadow
+             * ramp, so the sky right above it would stand bright and make
+             * every gap between crowns a sky hole. The lower half of the
+             * sky is pulled toward the shadow tone the ridge carries, and
+             * only the upper sky keeps full palette brightness. */
+            sky: { base: 0.1, range: 0.78, power: 1.35, halo: 0.7, stars: false, bridge: 0.42 },
             /* Backlit ridge: darker than the sky behind it. The sun column
              * would push it over half tone into sky colours if the light
              * and halo were left high, so both stay low: the ridge keeps
-             * its olive and russet silhouette and the sun sits behind it. */
-            mountain: { lit: 0.46, depth: 0.5, halo: 0.18, wave: 1.1 },
+             * its olive and russet silhouette and the sun sits behind it.
+             * `deep` pins the whole slope to the shadow ramp regardless of
+             * the halo and the drifting waves, which otherwise crest half
+             * tone under the disc and flash a patch of sky colour onto the
+             * ground. */
+            mountain: { lit: 0.46, depth: 0.5, halo: 0.18, wave: 1.1, deep: true },
             /* Plain green ground, not snow: dimmed so it lands in the
              * shadow ramp's greens and browns. The sun's share is kept
              * small so the lit field does not detach from the dark ridge
              * as a pale wedge; it should read as the same ground, shading
              * off down the slope before the dissolve takes it up to the
-             * paper page. */
-            field: { lit: 0.5, depth: 0.45, lift: 0.02, halo: 0.12 },
+             * paper page. `deep` keeps that sheet on the shadow ramp the
+             * same way the mountain does. */
+            field: { lit: 0.5, depth: 0.45, lift: 0.02, halo: 0.12, deep: true },
             trees: {
                 kinds: ["broadleaf"],
                 ramps: {
@@ -257,7 +284,11 @@
                     broadleaf: [0.8, 0.3]
                 },
                 capFloor: { broadleaf: 0 },
-                haze: [236, 190, 130],
+                /* Atmosphere is amber, not cream: deep enough that washed
+                 * distant crowns read as russet against the ridge instead
+                 * of matching the horizon sky. */
+                haze: [196, 138, 78],
+                hazeWash: [0.26, 0.9],
                 bark: AUTUMN_BARK
             },
             /* Nothing falls from the autumn sky. */
@@ -383,6 +414,36 @@
                 x1 + nx * 0.55, y1 + ny * 0.55,
                 x1 - nx * 0.55, y1 - ny * 0.55,
                 x0 - nx, y0 - ny, 0];
+        }
+
+        /* At the distance bands the detailed construction breaks apart
+         * into blocks only a pixel or two across, and the pale glints
+         * end up floating free of any crown. A distant tree here is a
+         * silhouette, not a portrait: one solid chestnut-shaped mass, a
+         * thick trunk, and one small top highlight, clipped to the mass. */
+        if (h < 20) {
+            var leanS = (r() - 0.5) * w * 0.1;
+            var cxS = w * 0.5 + leanS;
+            var crownWS = w * (0.78 + r() * 0.1);
+            var leftS = cxS - crownWS * 0.5;
+            var topS = h * 0.04;
+            var midS = h * 0.26;
+
+            body.push(block(leftS + crownWS * 0.2, topS, crownWS * 0.55, h * 0.3));
+            body.push(block(leftS, midS, crownWS, h * 0.28));
+            body.push(block(leftS + crownWS * 0.12, midS + h * 0.2, crownWS * 0.72, h * 0.14));
+
+            var forkS = h * 0.6;
+            bark.push([
+                cxS - 1, h,
+                cxS - 1, forkS,
+                cxS + 1, forkS,
+                cxS + 1, h, 0]);
+            bark.push(limb(cxS, forkS, cxS - w * 0.14, h * 0.32, 1));
+            bark.push(limb(cxS, forkS, cxS + w * 0.14, h * 0.32, 1));
+            bark.push(block(cxS - 1.5, h - 1, 3, 1));
+
+            return rasterise(w, h, body, lit, "clip", bark);
         }
 
         /* Six small variations on the same tree, rather than a second
@@ -639,7 +700,8 @@
 
                 var ramps = theme.trees.ramps[kind];
                 var base = ramps[(r() * ramps.length) | 0];
-                var wash = Math.min(0.55, band.dim * 1.6);
+                var wash = Math.min(
+                    theme.trees.hazeWash[0], band.dim * theme.trees.hazeWash[1]);
                 var tone = theme.trees.tone[kind];
                 var cap = theme.trees.cap[kind];
 
@@ -794,7 +856,7 @@
                         0.05 * sn(u * 2.6 + v * 1.1 + t * 0.004) +
                         0.035 * sn(u * 5.3 - v * 1.7 + 1.3) +
                         grain + halo * theme.field.halo;
-                    useDeep = L < 0.5;
+                    useDeep = theme.field.deep || L < 0.5;
                 } else if (y < ridge[x]) {
                     /* --- sky ------------------------------------------- */
                     /* Deep overhead, opening out towards the ridge. */
@@ -822,6 +884,19 @@
                         }
                     }
 
+                    /* The sky meets the ridge in the ridge's shadow tone.
+                     * This runs last on purpose: the halo and the drifting
+                     * banks come down low enough to touch the treeline, and
+                     * if they brightened it, a moving bank would show as a
+                     * pale patch sliding between the trees, in a different
+                     * place every few seconds. Blending after everything
+                     * keeps the whole coastline peaty twilight; only the
+                     * sun's own disc stays bright. */
+                    if (theme.sky.bridge) {
+                        var gap = clamp01((ridge[x] - y) / Math.max(1, ih * 0.45));
+                        L = L * (1 - gap) + theme.sky.bridge * gap;
+                    }
+
                     /* The disc. */
                     if (dr < mr) L = dr > mr * 0.9 ? theme.disc.rim : 1;
                 } else {
@@ -833,7 +908,7 @@
                     /* Cloud shadow crawling across the slope. */
                     L -= 0.08 * falloff(below, 3) * (0.5 + 0.5 * sn(u * 2.2 + t * 0.008));
                     L += grain;
-                    useDeep = L < 0.5;
+                    useDeep = theme.mountain.deep || L < 0.5;
                 }
 
                 /* The foot of the picture dissolves into the page. Doing it
@@ -841,15 +916,31 @@
                  * is what keeps it from reading as a stack of ruled bands
                  * laid over the landscape. */
                 var f = fadeAt(x, y);
-                L = dissolve(L, f);
-                /* Once the dissolve takes over, the picture is heading for
-                 * the page colour, which lives at one end of the main ramp;
-                 * the shadow ramp would stop short of it. */
-                if (f > 0.02) useDeep = false;
+                var dith = thr[(x & 7) | dithRow];
+                if (theme.fade && f > 0) {
+                    /* Walk the ground's own ramp up into the page. The
+                     * first steps match the shadow ramp, so the slope
+                     * enters the dissolve without a seam; the rest climb
+                     * through sage and bone to the page colour, keeping
+                     * the foot of the picture in ground tones instead of
+                     * handing it to the sky. */
+                    var lo = L * theme.shadow.length;
+                    var hi = theme.fade.length;
+                    var fi = (lo + (hi - lo) * f + dith) | 0;
+                    if (fi < 0) fi = 0;
+                    else if (fi > hi - 1) fi = hi - 1;
+                    data[row] = theme.fade[fi];
+                } else {
+                    L = dissolve(L, f);
+                    /* Once the dissolve takes over, the picture is heading
+                     * for the page colour, which lives at one end of the
+                     * main ramp; the shadow ramp would stop short of it. */
+                    if (f > 0.02) useDeep = false;
 
-                data[row] = useDeep
-                    ? shade(theme.shadow, L, thr[(x & 7) | dithRow])
-                    : shade(PAL, L, thr[(x & 7) | dithRow]);
+                    data[row] = useDeep
+                        ? shade(theme.shadow, L, dith)
+                        : shade(PAL, L, dith);
+                }
             }
         }
 
@@ -873,9 +964,15 @@
                     var tThr = thr[(px & 7) | dithY];
                     var tFade = fadeAt(px, py);
                     if (s === 2) {
-                        /* Lit foliage still catches the sky. */
+                        /* Lit foliage catches the sky, but never reaches
+                         * horizon brightness: cap it differently by depth
+                         * band. Near trees stay bright for sunlit texture;
+                         * distant trees stay below horizon tone so their
+                         * crowns cannot bridge into the sky behind them. */
                         var cap = capTone;
                         if (tr.capFloor && cap < tr.capFloor) cap = tr.capFloor;
+                        var capLimit = tr.dim > 0.2 ? 0.52 + tr.dim * 0.2 : 1;
+                        if (cap > capLimit) cap = capLimit;
                         data[idx] = tFade > tThr
                             ? pageColor
                             : shade(PAL, cap, tThr);
