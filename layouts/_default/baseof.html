@@ -13,9 +13,26 @@
     <meta name="author" content="{{ . }}">
     {{ end }}
     <link rel="icon" type="image/png" href="{{ "/images/favicon.svg" | relURL }}">
+    <script>
+        /* Resolve the season before the stylesheet paints, so autumn does
+         * not flash the winter colours on the way in. Keep this list in step
+         * with THEMES in js/seasonal-ridge.js. Until spring and summer have
+         * their own scenes, they use the autumn palette and daylight. */
+        (function () {
+            var month = new Date().getMonth();
+            var season = month >= 8 && month <= 10
+                ? "autumn"
+                : month === 11 || month <= 1
+                    ? "winter"
+                    : "autumn";
+            var forced = new URLSearchParams(location.search).get("season");
+            if (forced === "winter" || forced === "autumn") season = forced;
+            document.documentElement.setAttribute("data-season", season);
+        })();
+    </script>
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
     {{ if .IsHome }}
-    <script defer src="{{ "js/moonlit-ridge.js" | relURL }}"></script>
+    <script defer src="{{ "js/seasonal-ridge.js" | relURL }}"></script>
     {{ end }}
 </head>
 

@@ -1,15 +1,27 @@
 /* ------------------------------------------------------------------ *
  * chetaldrich.com
  *
- * One-bit theme: everything is moonlight (#e6ecf5) on near-black, with
- * ordered-dither fills standing in for the grey values.
+ * One-bit theme: two inks and a page, with ordered-dither fills standing
+ * in for the grey values. The page colour is seasonal: blue hour in
+ * winter, golden hour in autumn. The scene canvas paints the same two
+ * colours, and the foot of the picture dissolves into whichever page is
+ * behind it. `data-season` is set by an inline script in baseof.html
+ * before this stylesheet loads, so there is no flash of the wrong page.
  * ------------------------------------------------------------------ */
 
 :root {
+    color-scheme: dark;
     --ink: #eaf1fa;
     --void: #070b16;
     --dither: rgba(168, 194, 222, 0.5);
     --dim: rgba(200, 219, 238, 0.62);
+    --hover: #fff;
+    --rule: rgba(230, 236, 245, 0.22);
+    /* The bare gradient behind the canvas, before (or without) the scene.
+     * It should look like a plausible sky for the season, not like a hole. */
+    --hero-1: #070b16;
+    --hero-2: #0a1020;
+    --hero-3: #17263f;
     /* No webfonts: the site ships no font files, so both stacks are built
      * to land on a face that is actually installed rather than one that is
      * merely first in the list.
@@ -26,6 +38,22 @@
      * macOS and Windows and was drawn for screen at small sizes, which
      * makes it the one fallback worth naming. */
     --font-prose: "Iowan Old Style", Georgia, "Times New Roman", serif;
+}
+
+/* Golden hour. The page becomes warm paper and the ink an autumn brown;
+ * the hero's foot lands on exactly this cream (AUTUMN_RGB[7] in the scene
+ * script), which is what lets the painting dissolve into the page. */
+html[data-season="autumn"] {
+    color-scheme: light;
+    --ink: #2b2118;
+    --void: #f5edda;
+    --dither: rgba(105, 72, 38, 0.45);
+    --dim: rgba(72, 52, 30, 0.68);
+    --hover: #0d0a06;
+    --rule: rgba(43, 33, 24, 0.22);
+    --hero-1: #181929;
+    --hero-2: #9c6250;
+    --hero-3: #f5edda;
 }
 
 * {
@@ -47,6 +75,11 @@ body {
     background: var(--void);
 }
 
+::selection {
+    background: var(--ink);
+    color: var(--void);
+}
+
 a {
     color: var(--ink);
     text-decoration: none;
@@ -55,7 +88,7 @@ a {
 }
 
 a:hover {
-    color: #fff;
+    color: var(--hover);
     border-bottom-style: solid;
 }
 
@@ -99,7 +132,7 @@ img {
     margin: 0 -20px;
     /* What shows before (or without) the scene: a plausible sky, so the
      * band never reads as an empty hole. */
-    background: linear-gradient(to bottom, #070b16 0%, #0a1020 45%, #17263f 100%);
+    background: linear-gradient(to bottom, var(--hero-1) 0%, var(--hero-2) 45%, var(--hero-3) 100%);
 }
 
 /* The bottom of the painting dissolves into the page, but the scene draws
@@ -240,7 +273,7 @@ h2 {
 
 .cv-company {
     padding: 10px 0;
-    border-bottom: 1px dotted rgba(230, 236, 245, 0.22);
+    border-bottom: 1px dotted var(--rule);
 }
 
 .cv-company:last-child {
