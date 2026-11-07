@@ -47,12 +47,19 @@
         return out;
     }
 
+    /* One step of a ramp, chosen by a fractional index and the dither
+     * threshold. Shared by the tone-driven shades and by the dissolve,
+     * which walks its own ramp by index rather than by tone. */
+    function pick(ramp, index, thr) {
+        var i = (index + thr) | 0;
+        return ramp[i > ramp.length - 1 ? ramp.length - 1 : i < 0 ? 0 : i];
+    }
+
     /* Tone plus threshold, clamped into a ramp. Works for ramps of any
      * length, which matters because the trees use four steps and the
      * landscape uses eight. */
     function shade(ramp, tone, thr) {
-        var i = (tone * ramp.length + thr) | 0;
-        return ramp[i > ramp.length - 1 ? ramp.length - 1 : i < 0 ? 0 : i];
+        return pick(ramp, tone * ramp.length, thr);
     }
 
     /* ---------------------------------------------------------------- *
@@ -124,7 +131,9 @@
      * Every palette runs dark to light and its first or last step is the
      * page colour, depending on whether the picture dissolves to a dark
      * page (winter) or a light one (autumn). That way the foot of the
-     * canvas always lands on the exact colour of the page behind it.
+     * canvas always lands on the exact colour of the page behind it. A
+     * season may also supply its own `fade` ramp, which keeps the dissolve
+     * in ground tones instead of walking the main palette up to the page.
      * ---------------------------------------------------------------- */
 
     /* Blue hour. Eight steps from near-black navy to snow white, spaced
@@ -178,6 +187,17 @@
         [104, 55, 27]
     ];
 
+    /* The autumn ground. The fade ramp starts from the first four of these,
+     * so the dissolve enters the slope's own colours rather than jumping to
+     * a separate palette at the boundary. */
+    var AUTUMN_SHADOW = [
+        AUTUMN_RGB[0],
+        [30, 38, 30],
+        [52, 52, 28],
+        [84, 68, 30],
+        AUTUMN_RGB[4]
+    ];
+
     var THEMES = {
         winter: {
             palette: ramp(WINTER_RGB),
@@ -210,8 +230,7 @@
                 vMin: 7, vMax: 22,
                 windMin: 3, windMax: 12,
                 sway: 5, rate: 0.8,
-                near: 0.84,
-                colors: null
+                near: 0.84
             }
         },
 
@@ -220,13 +239,7 @@
             /* The dark half in autumn is ground, not pine: dark green
              * through olive and ochre to the russet the main ramp shares
              * at mid-tone. The field lives here. */
-            shadow: ramp([
-                AUTUMN_RGB[0],
-                [30, 38, 30],
-                [52, 52, 28],
-                [84, 68, 30],
-                AUTUMN_RGB[4]
-            ]),
+            shadow: ramp(AUTUMN_SHADOW),
             seed: 20260922,
             /* Daylight fades up into the paper-coloured page. The fade
              * walks a ground-only ramp, not the main palette: the main
@@ -236,16 +249,12 @@
              * dissolve without a seam, and the extra steps climb through
              * sage and bone to the page. */
             fadeTo: 1,
-            fade: ramp([
-                AUTUMN_RGB[0],
-                [30, 38, 30],
-                [52, 52, 28],
-                [84, 68, 30],
+            fade: ramp(AUTUMN_SHADOW.slice(0, 4).concat([
                 [118, 108, 70],
                 [156, 144, 106],
                 [200, 186, 152],
                 AUTUMN_RGB[7]
-            ]),
+            ])),
             light: { base: 0.7, gain: 0.16, width: 0.5 },
             /* A low sun in the left shoulder, almost touching the ridge. */
             disc: { x: 0.2, y: 0.47, r: 0.07, halo: 0.55, spread: 4.2, rim: 0.88 },
@@ -280,10 +289,9 @@
                 tone: {
                     broadleaf: [0.3, 0.6]
                 },
-                cap: {
-                    broadleaf: [0.8, 0.3]
-                },
-                capFloor: { broadleaf: 0 },
+                /* No lit material for the hardwood: at this size the glints
+                 * read as stray sky pixels in the crowns, so foliage and
+                 * bark are the whole tree. */
                 /* Atmosphere is amber, not cream: deep enough that washed
                  * distant crowns read as russet against the ridge instead
                  * of matching the horizon sky. */
@@ -301,7 +309,14 @@
      * another. Fall back gracefully if it is missing. */
     var theme = THEMES[document.documentElement.getAttribute("data-season")] || THEMES.winter;
     var PAL = theme.palette;
-    var pageColor = PAL[theme.fadeTo > 0 ? PAL.length - 1 : 0];
+    /* The page colour is whatever the foot of the picture lands on: the end
+     * of the season's own fade ramp if it has one, otherwise the end of the
+     * main palette that `fadeTo` points at. Trees and particles stipple to
+     * this same value, so reading it from the fade ramp keeps them in step
+     * with the ground. */
+    var pageColor = theme.fade
+        ? theme.fade[theme.fade.length - 1]
+        : PAL[theme.fadeTo > 0 ? PAL.length - 1 : 0];
 
     /* ---------------------------------------------------------------- *
      * Trees. Two silhouettes, drawn once into tiny buffers so each one
@@ -318,6 +333,7 @@
     var SW = 26;
     var SH = 36;
     var BROADLEAF_VARIANTS = 6;
+    var SPRUCE_VARIANTS = 3;
     var SPRITES = {};
 
     function treeSprite(kind, div, variant) {
@@ -376,22 +392,20 @@
             light.push([cx, a, cx + half * 0.9, top + d, cx + half * 0.45, e, cx, b, 0]);
         }
 
-        return rasterise(w, h, timber, light, null);
+        return rasterise(w, h, timber, light);
     }
 
     /* A hardwood built from stepped blocks, not ellipses. The canopy is an
      * uneven stack of rectangular leaf masses, with a different silhouette
      * on each side. A dark trunk forks through its lower half and flares
      * into roots at the ground; drawing the bark last keeps those branches
-     * visible against the foliage. Small rectangular highlights supply the
-     * leaf texture. At this resolution, round crowns and one-colour trunks
-     * read as lollipops no matter how they are shaded. */
+     * visible against the foliage. At this resolution, round crowns and
+     * one-colour trunks read as lollipops no matter how they are shaded. */
     function broadleaf(div, variant) {
         var w = Math.max(5, Math.round(SW / div));
         var h = Math.max(8, Math.round(SH / div));
         var r = rng(variant * 4241 + Math.round(div * 1000) + 29);
         var body = [];
-        var lit = [];
         var bark = [];
 
         function block(x, y, bw, bh) {
@@ -417,10 +431,9 @@
         }
 
         /* At the distance bands the detailed construction breaks apart
-         * into blocks only a pixel or two across, and the pale glints
-         * end up floating free of any crown. A distant tree here is a
-         * silhouette, not a portrait: one solid chestnut-shaped mass, a
-         * thick trunk, and one small top highlight, clipped to the mass. */
+         * into blocks only a pixel or two across. A distant tree here is a
+         * silhouette, not a portrait: one solid chestnut-shaped mass and a
+         * thick trunk. */
         if (h < 20) {
             var leanS = (r() - 0.5) * w * 0.1;
             var cxS = w * 0.5 + leanS;
@@ -443,7 +456,7 @@
             bark.push(limb(cxS, forkS, cxS + w * 0.14, h * 0.32, 1));
             bark.push(block(cxS - 1.5, h - 1, 3, 1));
 
-            return rasterise(w, h, body, lit, "clip", bark);
+            return rasterise(w, h, body, null, bark);
         }
 
         /* Six small variations on the same tree, rather than a second
@@ -483,16 +496,6 @@
             body.push(block(left + crownW * 0.03, low + h * 0.025, crownW * 0.2, h * 0.1));
         }
 
-        /* Small square glints, rather than the round spots that made the
-         * old crowns look like bubbles. Clipping keeps them on leaves. */
-        for (var j = 0; j < 9; j++) {
-            lit.push(block(
-                left + r() * crownW * 0.86,
-                top + r() * h * 0.4,
-                0.6 + r() * w * 0.09,
-                0.6 + r() * h * 0.035));
-        }
-
         /* A thick trunk, two main forks, and a pair of smaller side limbs.
          * These reach into the canopy instead of stopping underneath it. */
         var forkY = h * shape.fork;
@@ -514,10 +517,10 @@
         bark.push(limb(cx, h * 0.72,
             cx - w * 0.19, h * 0.58, Math.max(1, w * 0.065)));
 
-        return rasterise(w, h, body, lit, "clip", bark);
+        return rasterise(w, h, body, null, bark);
     }
 
-    function rasterise(w, h, body, lit, mode, bark) {
+    function rasterise(w, h, body, lit, bark) {
         var c = document.createElement("canvas");
         c.width = w;
         c.height = h;
@@ -551,19 +554,12 @@
             if (d[k * 4 + 3] >= 128) buf[k] = 1;
         }
 
-        if (lit.length) {
+        if (lit && lit.length) {
             var lc = document.createElement("canvas");
             lc.width = w;
             lc.height = h;
             var lg = lc.getContext("2d");
             paint(lg, lit);
-            /* Keep the lit pixels on the crown. For the hardwood the lobes
-             * may stray past the silhouette; clipping them to the body keeps
-             * the crown from growing a stray speck. */
-            if (mode === "clip") {
-                lg.globalCompositeOperation = "destination-in";
-                lg.drawImage(c, 0, 0);
-            }
             var dl = lg.getImageData(0, 0, w, h).data;
             for (var k2 = 0; k2 < buf.length; k2++) {
                 if (dl[k2 * 4 + 3] >= 128) buf[k2] = 2;
@@ -591,12 +587,14 @@
     var px32 = null;
     var iw = 0;
     var ih = 0;
-    var scale = 3;
 
     var mx = 0;      /* sun or moon centre        */
     var my = 0;
     var mr = 0;      /* sun or moon radius        */
     var ridge = [];  /* the skyline, per column   */
+    var fieldRows = null; /* the near field edge, per column */
+    var fadeRows = null;  /* the dissolve edge, per column   */
+    var litCol = null;    /* the sheet light, per column     */
     var fadeRow = 0; /* first row of the dissolve */
     var trees = [];
     var flakes = [];
@@ -636,7 +634,7 @@
     function layout() {
         var w = host.clientWidth;
         var h = host.clientHeight;
-        scale = w < 720 ? 2 : 3;
+        var scale = w < 720 ? 2 : 3;
 
         iw = Math.max(32, Math.ceil(w / scale));
         ih = Math.max(32, Math.ceil(h / scale));
@@ -666,6 +664,20 @@
                 ih * 0.012 * sn(u * 7.3) + ih * 0.008 * sn(u * 19.1 + 0.3);
         }
 
+        /* Two more per-column curves read by the frame. The near-field edge
+         * is where the ground begins; the sheet light is one value per
+         * column, shared by the mountain and the field, which is what keeps
+         * the join between them from showing as a line. Both are fixed
+         * between resizes, so build them here instead of recomputing them
+         * for every pixel of every frame. */
+        fieldRows = new Float64Array(iw);
+        litCol = new Float32Array(iw);
+        for (var x = 0; x < iw; x++) {
+            fieldRows[x] = fieldLineAt(x / iw);
+            litCol[x] = theme.light.base +
+                theme.light.gain * falloff(x - mx, 1 / (iw * theme.light.width));
+        }
+
         /* Trees in three depth bands, every one of them standing on that
          * ground: the treeline runs along the top of the field and then
          * steps down the slope towards the viewer, and each band sits on the
@@ -688,7 +700,7 @@
             for (var i = 0; i < count; i++) {
                 var kind = theme.trees.kinds[(r() * theme.trees.kinds.length) | 0];
                 var spr = treeSprite(kind, band.div,
-                    (r() * (kind === "broadleaf" ? BROADLEAF_VARIANTS : 3)) | 0);
+                    (r() * (kind === "broadleaf" ? BROADLEAF_VARIANTS : SPRUCE_VARIANTS)) | 0);
                 /* Jitter first, so the ground is read at the trunk's own
                  * column and the scatter follows the contour with it. */
                 var tu = r();
@@ -703,7 +715,7 @@
                 var wash = Math.min(
                     theme.trees.hazeWash[0], band.dim * theme.trees.hazeWash[1]);
                 var tone = theme.trees.tone[kind];
-                var cap = theme.trees.cap[kind];
+                var cap = theme.trees.cap && theme.trees.cap[kind];
 
                 trees.push({
                     buf: spr.buf,
@@ -721,9 +733,9 @@
                         : null,
                     toneBase: tone[0],
                     toneDim: tone[1],
-                    capBase: cap[0],
-                    capDim: cap[1],
-                    capFloor: theme.trees.capFloor[kind]
+                    capBase: cap ? cap[0] : 0,
+                    capDim: cap ? cap[1] : 0,
+                    capFloor: (theme.trees.capFloor && theme.trees.capFloor[kind]) || 0
                 });
             }
         }
@@ -738,6 +750,15 @@
             if (low > fadeRow) fadeRow = low;
         }
         if (fadeRow > ih - 6) fadeRow = ih - 6;
+
+        /* The dissolve edge drifts rather than ruling a line, so bake its
+         * per-column height once the row it hangs from is settled. */
+        fadeRows = new Float64Array(iw);
+        for (var x = 0; x < iw; x++) {
+            var u = x / iw;
+            fadeRows[x] = fadeRow +
+                (sn(u * 3.1 + 0.4) * 0.6 + sn(u * 7.3 + 2.2) * 0.4) * ih * 0.03;
+        }
 
         /* Snow where the season calls for it. Sparse on purpose: a dense
          * sheet stops reading as weather and starts reading as noise over
@@ -757,8 +778,7 @@
                  * of the picture and wraps at whichever edge it reaches
                  * instead of dropping straight down in place. */
                 w: p.windMin + r() * (p.windMax - p.windMin),
-                near: r(),
-                color: p.colors ? p.colors[(r() * p.colors.length) | 0] : null
+                near: r()
             });
         }
     }
@@ -767,18 +787,12 @@
      * Frame
      * ---------------------------------------------------------------- */
 
-    var litCol = null;
-
     /* How far the picture has fallen into the page at this pixel, zero to
-     * one. Eased, so the dissolve does not begin with a step of its own, and
-     * with a drifting edge for the same reason the field and the skyline
-     * have one: a boundary between two tones that runs dead straight across
-     * the frame is the one thing in a picture like this that reads as a
-     * ruled line rather than as a dither. */
+     * one. Eased, so the dissolve does not begin with a step of its own.
+     * The edge is the drifting per-column height built in layout(), which
+     * is what keeps the boundary from reading as a ruled line. */
     function fadeAt(x, y) {
-        var u = x / iw;
-        var edge = fadeRow +
-            (sn(u * 3.1 + 0.4) * 0.6 + sn(u * 7.3 + 2.2) * 0.4) * ih * 0.03;
+        var edge = fadeRows[x];
         if (y < edge) return 0;
         var f = (y - edge) / Math.max(1, ih - 1 - fadeRow);
         if (f > 1) f = 1;
@@ -797,23 +811,9 @@
         var invHalo = 1 / (mr * theme.disc.spread);
         var parts = theme.particles;
 
-        function flakeColor(fl, px, py, thrVal) {
-            var f = fadeAt(px, py);
-            if (fl.color !== null) return f > thrVal ? pageColor : fl.color;
-            var tone = 1 - f;
+        function flakeColor(px, py, thrVal) {
+            var tone = 1 - fadeAt(px, py);
             return tone <= 0 ? 0 : shade(PAL, tone, thrVal);
-        }
-
-        /* The field holds the light along the top of the ridge and falls
-         * away below; the sun or moon only nudges the brightness either
-         * side of that, so the whole sheet reads as one piece right across
-         * the frame. One value per column, shared by the mountain and the
-         * field, is also what keeps the join between the two from showing as
-         * a line. */
-        if (!litCol || litCol.length !== iw) litCol = new Float32Array(iw);
-        for (var lx = 0; lx < iw; lx++) {
-            litCol[lx] = theme.light.base +
-                theme.light.gain * falloff(lx - mx, 1 / (iw * theme.light.width));
         }
 
         for (var y = 0; y < ih; y++) {
@@ -826,9 +826,8 @@
                 var dy = y - my;
                 var dr = Math.sqrt(dx * dx + dy * dy);
                 var halo = theme.disc.halo * falloff(dr, invHalo);
-                var fieldLine = fieldLineAt(u);
+                var fieldLine = fieldRows[x];
                 var onField = y > fieldLine;
-                var depth = onField ? (y - fieldLine) / Math.max(1, ih - fieldLine) : 0;
                 var L;
                 /* Below half tone the picture uses the shadow ramp, which
                  * in winter is pine and in autumn is umber and olive. */
@@ -849,6 +848,7 @@
                      * is what puts the treeline against something brighter
                      * than itself; the season's field settings decide
                      * whether that sheet is snow or ground. */
+                    var depth = (y - fieldLine) / Math.max(1, ih - fieldLine);
                     L = litCol[x] * theme.field.lit * (1 - theme.field.depth * depth) +
                         theme.field.lift * clamp01((y - fieldLine) / (ih * 0.16)) +
                         /* Drifting across the slope, not ruling it: the waves
@@ -926,10 +926,7 @@
                      * handing it to the sky. */
                     var lo = L * theme.shadow.length;
                     var hi = theme.fade.length;
-                    var fi = (lo + (hi - lo) * f + dith) | 0;
-                    if (fi < 0) fi = 0;
-                    else if (fi > hi - 1) fi = hi - 1;
-                    data[row] = theme.fade[fi];
+                    data[row] = pick(theme.fade, lo + (hi - lo) * f, dith);
                 } else {
                     L = dissolve(L, f);
                     /* Once the dissolve takes over, the picture is heading
@@ -950,6 +947,13 @@
             var buf = tr.buf;
             var bodyTone = tr.toneBase + tr.dim * tr.toneDim;
             var capTone = tr.capBase - tr.dim * tr.capDim;
+            /* Lit foliage catches the sky, but never reaches horizon
+             * brightness: cap it differently by depth band. Near trees stay
+             * bright for sunlit texture; distant trees stay below horizon
+             * tone so their crowns cannot bridge into the sky behind them. */
+            if (tr.capFloor && capTone < tr.capFloor) capTone = tr.capFloor;
+            var capLimit = tr.dim > 0.2 ? 0.52 + tr.dim * 0.2 : 1;
+            if (capTone > capLimit) capTone = capLimit;
             for (var ty = 0; ty < tr.h; ty++) {
                 var py = tr.y + ty;
                 if (py < 0 || py >= ih) continue;
@@ -964,18 +968,9 @@
                     var tThr = thr[(px & 7) | dithY];
                     var tFade = fadeAt(px, py);
                     if (s === 2) {
-                        /* Lit foliage catches the sky, but never reaches
-                         * horizon brightness: cap it differently by depth
-                         * band. Near trees stay bright for sunlit texture;
-                         * distant trees stay below horizon tone so their
-                         * crowns cannot bridge into the sky behind them. */
-                        var cap = capTone;
-                        if (tr.capFloor && cap < tr.capFloor) cap = tr.capFloor;
-                        var capLimit = tr.dim > 0.2 ? 0.52 + tr.dim * 0.2 : 1;
-                        if (cap > capLimit) cap = capLimit;
                         data[idx] = tFade > tThr
                             ? pageColor
-                            : shade(PAL, cap, tThr);
+                            : shade(PAL, capTone, tThr);
                     } else if (s === 3) {
                         /* Bark stays dark brown regardless of the crown's
                          * colour or how strongly the foliage is hazed. */
@@ -983,9 +978,9 @@
                             ? pageColor
                             : shade(tr.bark, 0.36 + tr.dim * 0.25, tThr);
                     } else {
-                        var ci = (bodyTone * tr.ramp.length + tThr) | 0;
-                        if (ci > tr.ramp.length - 1) ci = tr.ramp.length - 1;
-                        data[idx] = tFade > tThr ? pageColor : tr.ramp[ci];
+                        data[idx] = tFade > tThr
+                            ? pageColor
+                            : shade(tr.ramp, bodyTone, tThr);
                     }
                 }
             }
@@ -1011,22 +1006,17 @@
             var fy = fl.y | 0;
             var fyDith = (fy & 7) << 3;
 
-            var main = flakeColor(fl, fx, fy, thr[(fx & 7) | fyDith]);
+            var main = flakeColor(fx, fy, thr[(fx & 7) | fyDith]);
             if (!main) continue;
-
-            /* A flake falls into the dissolve along with everything else,
-             * rather than staying a bright speck on top of it. */
-            var toneHere = 1 - fadeAt(fx, fy);
-            if (fl.color === null && toneHere <= 0) continue;
 
             if (fl.near > 0.84) {
                 if (fx + 1 < iw) {
                     data[fy * iw + fx + 1] =
-                        flakeColor(fl, fx + 1, fy, thr[((fx + 1) & 7) | fyDith]);
+                        flakeColor(fx + 1, fy, thr[((fx + 1) & 7) | fyDith]);
                 }
                 if (fy + 1 < ih) {
                     data[(fy + 1) * iw + fx] =
-                        flakeColor(fl, fx, fy + 1, thr[(fx & 7) | (((fy + 1) & 7) << 3)]);
+                        flakeColor(fx, fy + 1, thr[(fx & 7) | (((fy + 1) & 7) << 3)]);
                 }
             }
             data[fy * iw + fx] = main;
