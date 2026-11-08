@@ -9,9 +9,10 @@
  * The ridge, the tree bands and the dissolve into the page are one engine.
  * A season supplies everything that changes with the calendar: the palette,
  * what covers the ground, what kind of trees stand on it, what falls out of
- * the sky, and where the picture dissolves to. Add a season by adding an
- * entry to THEMES; the calendar mapping lives in the inline script in
- * layouts/_default/baseof.html.
+ * the sky, and where the picture dissolves to. Each season lives in its own
+ * theme file (winter-theme.js, autumn-theme.js, spring-theme.js), which
+ * registers raw RGB data before this engine runs. The calendar mapping lives
+ * in the inline script in layouts/_default/baseof.html.
  */
 (function () {
     var canvas = document.getElementById("scene");
@@ -130,311 +131,54 @@
      *
      * Every palette runs dark to light and its first or last step is the
      * page colour, depending on whether the picture dissolves to a dark
-     * page (winter) or a light one (autumn). That way the foot of the
-     * canvas always lands on the exact colour of the page behind it. A
-     * season may also supply its own `fade` ramp, which keeps the dissolve
-     * in ground tones instead of walking the main palette up to the page,
-     * and a `fog` height, which lets that veil climb into the treeline
-     * instead of staying below every trunk.
+     * page or a light one. That way the foot of the canvas always lands on
+     * the exact colour of the page behind it. A season may also supply its
+     * own `fade` ramp, which keeps the dissolve in ground tones instead of
+     * walking the main palette up to the page, and a `fog` height, which
+     * lets that veil climb into the treeline instead of staying below every
+     * trunk. Theme files register raw RGB triples; the ramps are packed
+     * here, where the palette byte order and dither helpers live.
      * ---------------------------------------------------------------- */
 
-    /* Blue hour. Eight steps from near-black navy to snow white, spaced
-     * roughly evenly in luminance so the dither has even work to do. */
-    var WINTER_RGB = [
-        [7, 11, 22],
-        [15, 25, 48],
-        [27, 43, 77],
-        [44, 70, 112],
-        [71, 106, 155],
-        [114, 151, 194],
-        [168, 194, 222],
-        [238, 244, 251]
-    ];
+    var THEMES = {};
 
-    /* Golden hour. Deep indigo overhead, plum and rose through the middle,
-     * and a warm paper at the foot, which is also the page colour. */
-    var AUTUMN_RGB = [
-        [24, 25, 43],
-        [44, 43, 71],
-        [77, 58, 90],
-        [122, 76, 88],
-        [171, 98, 77],
-        [207, 134, 82],
-        [232, 177, 111],
-        [245, 237, 218]
-    ];
-
-    /* Spruce timber, the one place the winter picture is properly green. */
-    var WINTER_TIMBER = [
-        [11, 24, 17],
-        [18, 39, 27],
-        [27, 57, 39],
-        [40, 80, 55]
-    ];
-
-    /* Autumn foliage, one ramp per tree. A tree picks one when it is
-     * planted, so the hillside is mixed rather than uniform. */
-    var AUTUMN_FOLIAGE = [
-        [[42, 24, 16], [78, 40, 18], [124, 64, 22], [174, 96, 36]],
-        [[38, 20, 20], [76, 30, 24], [126, 48, 30], [178, 76, 42]],
-        [[46, 38, 18], [86, 72, 24], [134, 108, 34], [184, 150, 56]]
-    ];
-
-    /* Bark has its own ramp: trunk and branches must not take their colour
-     * from whichever foliage ramp the crown happened to draw. */
-    var AUTUMN_BARK = [
-        [22, 15, 13],
-        [42, 24, 17],
-        [70, 37, 21],
-        [104, 55, 27]
-    ];
-
-    /* The autumn ground. The fade ramp starts from the first four of these,
-     * so the dissolve enters the slope's own colours rather than jumping to
-     * a separate palette at the boundary. */
-    var AUTUMN_SHADOW = [
-        AUTUMN_RGB[0],
-        [30, 38, 30],
-        [52, 52, 28],
-        [84, 68, 30],
-        AUTUMN_RGB[4]
-    ];
-
-    /* Dawn. Cool the whole way up, warm only where the light is: slate
-     * overhead, silver through the middle, a narrow band of apricot at the
-     * horizon, and a pale green at the foot that is both the grass the fog
-     * is sitting on and the page behind it. Warming only the top of the
-     * ramp is the whole idea: autumn already owns a warm sky, and a dawn
-     * that is warm from top to bottom is just autumn with green trees. */
-    var SPRING_RGB = [
-        [22, 30, 44],
-        [40, 56, 82],
-        [66, 88, 120],
-        [104, 124, 150],
-        [150, 158, 152],
-        [192, 182, 160],
-        [226, 206, 180],
-        [233, 240, 222]
-    ];
-
-    /* Spruce in leaf: the same dark timber as winter, shifted blue-green so
-     * the evergreens read as cold morning rather than night. They are the
-     * dark anchor the pale picture needs. */
-    var SPRING_TIMBER = [
-        [18, 28, 26],
-        [28, 44, 40],
-        [40, 62, 52],
-        [56, 82, 66]
-    ];
-
-    /* New hardwood leaf, one ramp per tree. Pale and desaturated on
-     * purpose: an emerald here would be summer, and the crowns would stop
-     * reading as backlit. */
-    var SPRING_FOLIAGE = [
-        [[50, 62, 36], [88, 108, 54], [128, 150, 80], [170, 188, 116]],
-        [[34, 54, 48], [62, 96, 78], [98, 136, 108], [146, 178, 146]],
-        [[46, 56, 44], [86, 98, 70], [128, 138, 102], [172, 180, 146]]
-    ];
-
-    /* Wet spring bark: darker and cooler than the autumn wood, so the forks
-     * hold against a pale crown. */
-    var SPRING_BARK = [
-        [20, 20, 22],
-        [38, 36, 34],
-        [66, 58, 48],
-        [98, 86, 68]
-    ];
-
-    /* The morning ground: cold greens, already silvering where the mist has
-     * reached. The fade ramp starts from the first four, so the slope
-     * enters the fog without a seam. */
-    var SPRING_SHADOW = [
-        SPRING_RGB[0],
-        [36, 52, 46],
-        [58, 82, 64],
-        [92, 112, 78],
-        SPRING_RGB[4]
-    ];
-
-    var THEMES = {
-        winter: {
-            palette: ramp(WINTER_RGB),
-            shadow: ramp([
-                WINTER_RGB[0],
-                [15, 28, 24],
-                [24, 44, 36],
-                [38, 64, 54],
-                WINTER_RGB[4]
-            ]),
-            seed: 20240211,
-            /* The foot of the picture goes dark, into the dark page. */
-            fadeTo: 0,
-            light: { base: 0.7, gain: 0.14, width: 0.55 },
-            disc: { x: 0.84, y: 0.2, r: 0.085, halo: 0.3, spread: 2.8, rim: 0.7 },
-            sky: { base: 0.05, range: 0.48, power: 1.5, halo: 0.7, stars: true, bridge: 0 },
-            mountain: { lit: 1, depth: 0.42, halo: 0.4, wave: 1 },
-            field: { lit: 1, depth: 0.34, lift: 0.03, halo: 0.3 },
-            trees: {
-                kinds: ["spruce"],
-                ramps: { spruce: [WINTER_TIMBER] },
-                tone: { spruce: [0.34, 0.5] },
-                cap: { spruce: [0.94, 0.7] },
-                capFloor: { spruce: 0.4 },
-                haze: [66, 98, 136],
-                hazeWash: [0.55, 1.6]
-            },
-            particles: {
-                density: 460,
-                vMin: 7, vMax: 22,
-                windMin: 3, windMax: 12,
-                sway: 5, rate: 0.8,
-                near: 0.84
+    function compileTheme(source) {
+        var compiled = {};
+        for (var key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) compiled[key] = source[key];
+        }
+        compiled.palette = ramp(source.palette);
+        compiled.shadow = ramp(source.shadow);
+        if (source.fade) compiled.fade = ramp(source.fade);
+        if (source.particles) {
+            compiled.particles = {};
+            for (var particleKey in source.particles) {
+                if (Object.prototype.hasOwnProperty.call(source.particles, particleKey)) {
+                    compiled.particles[particleKey] = source.particles[particleKey];
+                }
             }
-        },
+            if (source.particles.tint) compiled.particles.tint = ramp(source.particles.tint);
+        }
+        return compiled;
+    }
 
-        autumn: {
-            palette: ramp(AUTUMN_RGB),
-            /* The dark half in autumn is ground, not pine: dark green
-             * through olive and ochre to the russet the main ramp shares
-             * at mid-tone. The field lives here. */
-            shadow: ramp(AUTUMN_SHADOW),
-            seed: 20260922,
-            /* Daylight fades up into the paper-coloured page. The fade
-             * walks a ground-only ramp, not the main palette: the main
-             * ramp would pass through the sky's plums and sands and lay
-             * a band of weather across the foot of the picture. Its first
-             * steps are the shadow ramp's own, so the slope enters the
-             * dissolve without a seam, and the extra steps climb through
-             * sage and bone to the page. */
-            fadeTo: 1,
-            fade: ramp(AUTUMN_SHADOW.slice(0, 4).concat([
-                [118, 108, 70],
-                [156, 144, 106],
-                [200, 186, 152],
-                AUTUMN_RGB[7]
-            ])),
-            light: { base: 0.7, gain: 0.16, width: 0.5 },
-            /* A low sun in the left shoulder, almost touching the ridge. */
-            disc: { x: 0.2, y: 0.47, r: 0.07, halo: 0.55, spread: 4.2, rim: 0.88 },
-            /* Twilight continuum: the ridge itself never leaves the shadow
-             * ramp, so the sky right above it would stand bright and make
-             * every gap between crowns a sky hole. The lower half of the
-             * sky is pulled toward the shadow tone the ridge carries, and
-             * only the upper sky keeps full palette brightness. */
-            sky: { base: 0.1, range: 0.78, power: 1.35, halo: 0.7, stars: false, bridge: 0.42 },
-            /* Backlit ridge: darker than the sky behind it. The sun column
-             * would push it over half tone into sky colours if the light
-             * and halo were left high, so both stay low: the ridge keeps
-             * its olive and russet silhouette and the sun sits behind it.
-             * `deep` pins the whole slope to the shadow ramp regardless of
-             * the halo and the drifting waves, which otherwise crest half
-             * tone under the disc and flash a patch of sky colour onto the
-             * ground. */
-            mountain: { lit: 0.46, depth: 0.5, halo: 0.18, wave: 1.1, deep: true },
-            /* Plain green ground, not snow: dimmed so it lands in the
-             * shadow ramp's greens and browns. The sun's share is kept
-             * small so the lit field does not detach from the dark ridge
-             * as a pale wedge; it should read as the same ground, shading
-             * off down the slope before the dissolve takes it up to the
-             * paper page. `deep` keeps that sheet on the shadow ramp the
-             * same way the mountain does. */
-            field: { lit: 0.5, depth: 0.45, lift: 0.02, halo: 0.12, deep: true },
-            trees: {
-                kinds: ["broadleaf"],
-                ramps: {
-                    broadleaf: AUTUMN_FOLIAGE
-                },
-                tone: {
-                    broadleaf: [0.3, 0.6]
-                },
-                /* No lit material for the hardwood: at this size the glints
-                 * read as stray sky pixels in the crowns, so foliage and
-                 * bark are the whole tree. */
-                /* Atmosphere is amber, not cream: deep enough that washed
-                 * distant crowns read as russet against the ridge instead
-                 * of matching the horizon sky. */
-                haze: [196, 138, 78],
-                hazeWash: [0.26, 0.9],
-                bark: AUTUMN_BARK
-            },
-            /* Nothing falls from the autumn sky. */
-            particles: null
-        },
-
-        spring: {
-            palette: ramp(SPRING_RGB),
-            /* Morning ground: the field lives in these cold greens. */
-            shadow: ramp(SPRING_SHADOW),
-            seed: 20260320,
-            /* Daylight again, into the pale green page. */
-            fadeTo: 1,
-            /* The dissolve is the valley fog. The ground's own greens climb
-             * through silver-green into the page, so the bottom of the
-             * picture reads as mist lying on the grass rather than as paper
-             * cut in behind it. */
-            fade: ramp(SPRING_SHADOW.slice(0, 4).concat([
-                [126, 142, 118],
-                [170, 184, 160],
-                [206, 220, 196],
-                SPRING_RGB[7]
-            ])),
-            /* Instead of ducking under every trunk, the veil climbs into the
-             * treeline: near trunks standing with their feet in fog is the
-             * whole point of the season. */
-            fog: 0.82,
-            light: { base: 0.6, gain: 0.22, width: 0.55 },
-            /* A small sun half-buried behind the dome, mirrored into the
-             * right of frame from autumn's left shoulder. The disc is only
-             * drawn in the sky region, so the ridge cuts it for free. */
-            disc: { x: 0.68, y: 0.442, r: 0.065, halo: 0.35, spread: 5, rim: 0.9 },
-            /* Shallow and cool: no near-black overhead, and no bridge, so
-             * the treeline sits against open morning sky instead of being
-             * peated down to the ridge's tone. The few last stars survive
-             * because the upper sky still dips below the star threshold. */
-            sky: { base: 0.13, range: 0.98, power: 1.6, halo: 0.8, stars: true, bridge: 0 },
-            /* Backlit: the ridge stays a silhouette, holding the picture
-             * together against all that pale sky. */
-            mountain: { lit: 0.44, depth: 0.46, halo: 0.1, wave: 1, deep: true },
-            field: { lit: 0.55, depth: 0.5, lift: 0.02, halo: 0.06, deep: true },
-            trees: {
-                /* Both species, which neither other season has: a real
-                 * spring wood is spruce standing among hardwoods in bud. */
-                kinds: ["spruce", "broadleaf"],
-                ramps: { spruce: [SPRING_TIMBER], broadleaf: SPRING_FOLIAGE },
-                tone: { spruce: [0.34, 0.5], broadleaf: [0.46, 0.72] },
-                /* No lit rim on the spruce here. The cap material is a pale
-                 * sky tone, and against a pale dawn it turns each far tree
-                 * into a stack of grey bars. Backlit evergreens should be
-                 * solid dark spikes. */
-                /* Mist is silver, not amber. Kept light for this season: the
-                 * haze is what makes distance read, but a strong wash turns
-                 * the tiered spruce into a stack of pale bars. */
-                haze: [196, 206, 204],
-                hazeWash: [0.3, 0.85],
-                bark: SPRING_BARK
-            },
-            particles: {
-                density: 2200,
-                vMin: 2.5, vMax: 7,
-                windMin: 2, windMax: 6,
-                sway: 4, rate: 0.45,
-                /* A blush tint keeps the blossom from reading as one more
-                 * fall of white flakes. Held mid-ramp, the petals contrast
-                 * with both the pale sky and the dark treeline. */
-                tint: ramp([
-                    [120, 74, 80],
-                    [164, 108, 110],
-                    [202, 150, 146],
-                    [230, 192, 184]
-                ])
+    /* Theme scripts load before this engine (defer preserves order) and
+     * register themselves on window.SeasonalRidgeThemes. */
+    (function registerThemes() {
+        var seasonalThemes = window.SeasonalRidgeThemes;
+        if (!seasonalThemes) return;
+        for (var name in seasonalThemes) {
+            if (Object.prototype.hasOwnProperty.call(seasonalThemes, name)) {
+                THEMES[name] = compileTheme(seasonalThemes[name]);
             }
         }
-    };
+    })();
 
     /* The inline script in baseof.html has already resolved the date to one
      * of these names, so the page never paints one palette and then swaps to
      * another. Fall back gracefully if it is missing. */
-    var theme = THEMES[document.documentElement.getAttribute("data-season")] || THEMES.winter;
+    var theme = THEMES[document.documentElement.getAttribute("data-season")] || THEMES.winter || THEMES.autumn || THEMES.spring;
+    if (!theme) return;
     var PAL = theme.palette;
     /* The page colour is whatever the foot of the picture lands on: the end
      * of the season's own fade ramp if it has one, otherwise the end of the

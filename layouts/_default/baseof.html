@@ -16,9 +16,10 @@
     <script>
         /* Resolve the season before the stylesheet paints, so spring does
          * not flash the winter colours on the way in. Keep this list in step
-         * with THEMES in js/autumn-ridge.js. Meteorological seasons: spring
-         * is March through May, autumn is September through November, winter
-         * is December through February. Summer has no scene yet, so it
+         * with the themes registered by the scene scripts (winter-theme.js,
+         * autumn-theme.js, spring-theme.js). Meteorological
+         * seasons: spring is March–May, autumn is September–November, and
+         * winter is December–February. Summer has no scene yet, so it
          * borrows autumn's palette and daylight. */
         (function () {
             var month = new Date().getMonth();
@@ -41,7 +42,10 @@
     </script>
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
     {{ if .IsHome }}
-    <script defer src="{{ "js/autumn-ridge.js" | relURL }}"></script>
+    <script defer src="{{ "js/winter-theme.js" | relURL }}"></script>
+    <script defer src="{{ "js/autumn-theme.js" | relURL }}"></script>
+    <script defer src="{{ "js/spring-theme.js" | relURL }}"></script>
+    <script defer src="{{ "js/ridge.js" | relURL }}"></script>
     {{ end }}
 </head>
 
