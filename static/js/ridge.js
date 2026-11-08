@@ -177,8 +177,17 @@
     /* The inline script in baseof.html has already resolved the date to one
      * of these names, so the page never paints one palette and then swaps to
      * another. Fall back gracefully if it is missing. */
-    var theme = THEMES[document.documentElement.getAttribute("data-season")] || THEMES.winter || THEMES.autumn || THEMES.spring;
+    var seasonName = document.documentElement.getAttribute("data-season");
+    var theme = THEMES[seasonName] || THEMES.winter || THEMES.autumn || THEMES.spring;
     if (!theme) return;
+    /* A quiet whisper for the curious: no pixels, just the console. */
+    try {
+        if (window.console && window.console.log) {
+            window.console.log(
+                "This ridge follows the calendar and it is " + seasonName + " right now. try ?season=winter, ?season=spring, ?season=summer, or ?season=autumn."
+            );
+        }
+    } catch (e) {}
     var PAL = theme.palette;
     /* The page colour is whatever the foot of the picture lands on: the end
      * of the season's own fade ramp if it has one, otherwise the end of the
@@ -419,7 +428,7 @@
         var c = document.createElement("canvas");
         c.width = w;
         c.height = h;
-        var g = c.getContext("2d");
+        var g = c.getContext("2d", { willReadFrequently: true });
         var buf = new Uint8Array(w * h);
 
         function paint(target, list) {
@@ -455,7 +464,7 @@
             var lc = document.createElement("canvas");
             lc.width = w;
             lc.height = h;
-            var lg = lc.getContext("2d");
+            var lg = lc.getContext("2d", { willReadFrequently: true });
             paint(lg, lit);
             var dl = lg.getImageData(0, 0, w, h).data;
             for (var k2 = 0; k2 < buf.length; k2++) {
