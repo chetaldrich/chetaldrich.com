@@ -15,7 +15,7 @@ Personal site built with [Hugo](https://gohugo.io), deployed on Netlify (auto-de
 - `content/` — Markdown content. Homepage at `content/_index.md`.
 - `data/experience.json` — the work history rendered by `layouts/index.html`. Company `url` and `roles` only; company names are set as text in the prose serif, not as logo images.
 - `layouts/` — Go HTML templates. `partials/signature.html` holds the hand-drawn SVG signature inline, and is only reached from the non-home `masthead`.
-- `static/` — Raw assets copied to site root: `css/style.css`, `js/ridge.js` (the shared hero canvas engine), `js/winter-theme.js`, `js/autumn-theme.js`, `js/spring-theme.js` (season scene data), `resume.pdf`, `images/favicon.svg`, `images/signature_animated.svg`.
+- `static/` — Raw assets copied to site root: `css/style.css`, `js/ridge.js` (the shared hero canvas engine), `js/winter-theme.js`, `js/spring-theme.js`, `js/summer-theme.js`, `js/autumn-theme.js` (season scene data), `resume.pdf`, `images/favicon.svg`, `images/signature_animated.svg`.
 - `public/` is gitignored — Hugo build output.
 
 ## Quirks

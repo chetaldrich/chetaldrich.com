@@ -3,11 +3,11 @@
  *
  * One-bit theme: two inks and a page, with ordered-dither fills standing
  * in for the grey values. The page colour is seasonal: blue hour in
- * winter, dawn in spring, golden hour in autumn. The scene canvas paints
- * the same two colours, and the foot of the picture dissolves into
- * whichever page is behind it. `data-season` is set by an inline script in
- * baseof.html before this stylesheet loads, so there is no flash of the
- * wrong page.
+ * winter, dawn in spring, high noon in summer, golden hour in autumn. The
+ * scene canvas paints the same two colours, and the foot of the picture
+ * dissolves into whichever page is behind it. `data-season` is set by an
+ * inline script in baseof.html before this stylesheet loads, so there is no
+ * flash of the wrong page.
  * ------------------------------------------------------------------ */
 
 :root {
@@ -72,6 +72,22 @@ html[data-season="spring"] {
     --hero-1: #161e2c;
     --hero-2: #969e98;
     --hero-3: #e9f0de;
+}
+
+/* High noon. The page is bright sunlit paper with barely a green cast —
+ * SUMMER_RGB[7] in the scene script — and the ink a deep summer green.
+ * The brightest page of the four seasons, for the brightest hour. */
+html[data-season="summer"] {
+    color-scheme: light;
+    --ink: #17251b;
+    --void: #f3f7e6;
+    --dither: rgba(45, 90, 60, 0.45);
+    --dim: rgba(35, 70, 50, 0.68);
+    --hover: #0a140e;
+    --rule: rgba(23, 37, 27, 0.22);
+    --hero-1: #173e6e;
+    --hero-2: #7daab9;
+    --hero-3: #f3f7e6;
 }
 
 * {

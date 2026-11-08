@@ -14,13 +14,12 @@
     {{ end }}
     <link rel="icon" type="image/png" href="{{ "/images/favicon.svg" | relURL }}">
     <script>
-        /* Resolve the season before the stylesheet paints, so spring does
+        /* Resolve the season before the stylesheet paints, so summer does
          * not flash the winter colours on the way in. Keep this list in step
          * with the themes registered by the scene scripts (winter-theme.js,
-         * autumn-theme.js, spring-theme.js). Meteorological
-         * seasons: spring is March–May, autumn is September–November, and
-         * winter is December–February. Summer has no scene yet, so it
-         * borrows autumn's palette and daylight. */
+         * spring-theme.js, summer-theme.js, autumn-theme.js). Meteorological
+         * seasons: spring is March–May, summer is June–August, autumn is
+         * September–November, and winter is December–February. */
         (function () {
             var month = new Date().getMonth();
             var season;
@@ -31,10 +30,10 @@
             } else if (month <= 4) {
                 season = "spring";
             } else {
-                season = "autumn";
+                season = "summer";
             }
             var forced = new URLSearchParams(location.search).get("season");
-            if (forced === "winter" || forced === "autumn" || forced === "spring") {
+            if (forced === "winter" || forced === "spring" || forced === "summer" || forced === "autumn") {
                 season = forced;
             }
             document.documentElement.setAttribute("data-season", season);
@@ -43,8 +42,9 @@
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
     {{ if .IsHome }}
     <script defer src="{{ "js/winter-theme.js" | relURL }}"></script>
-    <script defer src="{{ "js/autumn-theme.js" | relURL }}"></script>
     <script defer src="{{ "js/spring-theme.js" | relURL }}"></script>
+    <script defer src="{{ "js/summer-theme.js" | relURL }}"></script>
+    <script defer src="{{ "js/autumn-theme.js" | relURL }}"></script>
     <script defer src="{{ "js/ridge.js" | relURL }}"></script>
     {{ end }}
 </head>
