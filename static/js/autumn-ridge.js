@@ -133,7 +133,9 @@
      * page (winter) or a light one (autumn). That way the foot of the
      * canvas always lands on the exact colour of the page behind it. A
      * season may also supply its own `fade` ramp, which keeps the dissolve
-     * in ground tones instead of walking the main palette up to the page.
+     * in ground tones instead of walking the main palette up to the page,
+     * and a `fog` height, which lets that veil climb into the treeline
+     * instead of staying below every trunk.
      * ---------------------------------------------------------------- */
 
     /* Blue hour. Eight steps from near-black navy to snow white, spaced
@@ -196,6 +198,62 @@
         [52, 52, 28],
         [84, 68, 30],
         AUTUMN_RGB[4]
+    ];
+
+    /* Dawn. Cool the whole way up, warm only where the light is: slate
+     * overhead, silver through the middle, a narrow band of apricot at the
+     * horizon, and a pale green at the foot that is both the grass the fog
+     * is sitting on and the page behind it. Warming only the top of the
+     * ramp is the whole idea: autumn already owns a warm sky, and a dawn
+     * that is warm from top to bottom is just autumn with green trees. */
+    var SPRING_RGB = [
+        [22, 30, 44],
+        [40, 56, 82],
+        [66, 88, 120],
+        [104, 124, 150],
+        [150, 158, 152],
+        [192, 182, 160],
+        [226, 206, 180],
+        [233, 240, 222]
+    ];
+
+    /* Spruce in leaf: the same dark timber as winter, shifted blue-green so
+     * the evergreens read as cold morning rather than night. They are the
+     * dark anchor the pale picture needs. */
+    var SPRING_TIMBER = [
+        [18, 28, 26],
+        [28, 44, 40],
+        [40, 62, 52],
+        [56, 82, 66]
+    ];
+
+    /* New hardwood leaf, one ramp per tree. Pale and desaturated on
+     * purpose: an emerald here would be summer, and the crowns would stop
+     * reading as backlit. */
+    var SPRING_FOLIAGE = [
+        [[50, 62, 36], [88, 108, 54], [128, 150, 80], [170, 188, 116]],
+        [[34, 54, 48], [62, 96, 78], [98, 136, 108], [146, 178, 146]],
+        [[46, 56, 44], [86, 98, 70], [128, 138, 102], [172, 180, 146]]
+    ];
+
+    /* Wet spring bark: darker and cooler than the autumn wood, so the forks
+     * hold against a pale crown. */
+    var SPRING_BARK = [
+        [20, 20, 22],
+        [38, 36, 34],
+        [66, 58, 48],
+        [98, 86, 68]
+    ];
+
+    /* The morning ground: cold greens, already silvering where the mist has
+     * reached. The fade ramp starts from the first four, so the slope
+     * enters the fog without a seam. */
+    var SPRING_SHADOW = [
+        SPRING_RGB[0],
+        [36, 52, 46],
+        [58, 82, 64],
+        [92, 112, 78],
+        SPRING_RGB[4]
     ];
 
     var THEMES = {
@@ -301,6 +359,75 @@
             },
             /* Nothing falls from the autumn sky. */
             particles: null
+        },
+
+        spring: {
+            palette: ramp(SPRING_RGB),
+            /* Morning ground: the field lives in these cold greens. */
+            shadow: ramp(SPRING_SHADOW),
+            seed: 20260320,
+            /* Daylight again, into the pale green page. */
+            fadeTo: 1,
+            /* The dissolve is the valley fog. The ground's own greens climb
+             * through silver-green into the page, so the bottom of the
+             * picture reads as mist lying on the grass rather than as paper
+             * cut in behind it. */
+            fade: ramp(SPRING_SHADOW.slice(0, 4).concat([
+                [126, 142, 118],
+                [170, 184, 160],
+                [206, 220, 196],
+                SPRING_RGB[7]
+            ])),
+            /* Instead of ducking under every trunk, the veil climbs into the
+             * treeline: near trunks standing with their feet in fog is the
+             * whole point of the season. */
+            fog: 0.82,
+            light: { base: 0.6, gain: 0.22, width: 0.55 },
+            /* A small sun half-buried behind the dome, mirrored into the
+             * right of frame from autumn's left shoulder. The disc is only
+             * drawn in the sky region, so the ridge cuts it for free. */
+            disc: { x: 0.68, y: 0.442, r: 0.065, halo: 0.35, spread: 5, rim: 0.9 },
+            /* Shallow and cool: no near-black overhead, and no bridge, so
+             * the treeline sits against open morning sky instead of being
+             * peated down to the ridge's tone. The few last stars survive
+             * because the upper sky still dips below the star threshold. */
+            sky: { base: 0.13, range: 0.98, power: 1.6, halo: 0.8, stars: true, bridge: 0 },
+            /* Backlit: the ridge stays a silhouette, holding the picture
+             * together against all that pale sky. */
+            mountain: { lit: 0.44, depth: 0.46, halo: 0.1, wave: 1, deep: true },
+            field: { lit: 0.55, depth: 0.5, lift: 0.02, halo: 0.06, deep: true },
+            trees: {
+                /* Both species, which neither other season has: a real
+                 * spring wood is spruce standing among hardwoods in bud. */
+                kinds: ["spruce", "broadleaf"],
+                ramps: { spruce: [SPRING_TIMBER], broadleaf: SPRING_FOLIAGE },
+                tone: { spruce: [0.34, 0.5], broadleaf: [0.46, 0.72] },
+                /* No lit rim on the spruce here. The cap material is a pale
+                 * sky tone, and against a pale dawn it turns each far tree
+                 * into a stack of grey bars. Backlit evergreens should be
+                 * solid dark spikes. */
+                /* Mist is silver, not amber. Kept light for this season: the
+                 * haze is what makes distance read, but a strong wash turns
+                 * the tiered spruce into a stack of pale bars. */
+                haze: [196, 206, 204],
+                hazeWash: [0.3, 0.85],
+                bark: SPRING_BARK
+            },
+            particles: {
+                density: 2200,
+                vMin: 2.5, vMax: 7,
+                windMin: 2, windMax: 6,
+                sway: 4, rate: 0.45,
+                /* A blush tint keeps the blossom from reading as one more
+                 * fall of white flakes. Held mid-ramp, the petals contrast
+                 * with both the pale sky and the dark treeline. */
+                tint: ramp([
+                    [120, 74, 80],
+                    [164, 108, 110],
+                    [202, 150, 146],
+                    [230, 192, 184]
+                ])
+            }
         }
     };
 
@@ -395,12 +522,13 @@
         return rasterise(w, h, timber, light);
     }
 
-    /* A hardwood built from stepped blocks, not ellipses. The canopy is an
-     * uneven stack of rectangular leaf masses, with a different silhouette
-     * on each side. A dark trunk forks through its lower half and flares
-     * into roots at the ground; drawing the bark last keeps those branches
-     * visible against the foliage. At this resolution, round crowns and
-     * one-colour trunks read as lollipops no matter how they are shaded. */
+    /* A hardwood built from stepped masses, not ellipses. The canopy is an
+     * uneven stack of leaf clumps, each a rectangle with its corners cut,
+     * with a different silhouette on each side. A dark trunk forks through
+     * its lower half and flares into roots at the ground; drawing the bark
+     * last keeps those branches visible against the foliage. At this
+     * resolution, round crowns and one-colour trunks read as lollipops no
+     * matter how they are shaded. */
     function broadleaf(div, variant) {
         var w = Math.max(5, Math.round(SW / div));
         var h = Math.max(8, Math.round(SH / div));
@@ -414,6 +542,26 @@
             bw = Math.max(1, Math.round(bw));
             bh = Math.max(1, Math.round(bh));
             return [x, y, x + bw, y, x + bw, y + bh, x, y + bh, 0];
+        }
+
+        /* A leaf mass: the same rectangle as block(), with its corners cut.
+         * A bare rectangle reads as a Lego brick at this size and a stack of
+         * them as a building, which is exactly what a pale crown exposes.
+         * A bevel of one or two pixels is enough for the union of several
+         * masses to read as foliage again, and it keeps the stepped look the
+         * hardwood is built on. */
+        function clump(x, y, bw, bh) {
+            var x0 = Math.round(x);
+            var y0 = Math.round(y);
+            var x1 = x0 + Math.max(2, Math.round(bw));
+            var y1 = y0 + Math.max(2, Math.round(bh));
+            var c = Math.min(2, (x1 - x0) * 0.28, (y1 - y0) * 0.35);
+            return [
+                x0 + c, y0, x1 - c, y0,
+                x1, y0 + c, x1, y1 - c,
+                x1 - c, y1, x0 + c, y1,
+                x0, y1 - c, x0, y0 + c, 0
+            ];
         }
 
         /* A tapered limb, narrowing towards its tip. */
@@ -437,14 +585,17 @@
         if (h < 20) {
             var leanS = (r() - 0.5) * w * 0.1;
             var cxS = w * 0.5 + leanS;
-            var crownWS = w * (0.78 + r() * 0.1);
+            var crownWS = w * (0.7 + r() * 0.1);
             var leftS = cxS - crownWS * 0.5;
             var topS = h * 0.04;
             var midS = h * 0.26;
 
-            body.push(block(leftS + crownWS * 0.2, topS, crownWS * 0.55, h * 0.3));
-            body.push(block(leftS, midS, crownWS, h * 0.28));
-            body.push(block(leftS + crownWS * 0.12, midS + h * 0.2, crownWS * 0.72, h * 0.14));
+            body.push(clump(cxS - crownWS * 0.25, topS, crownWS * 0.52, h * 0.2));
+            body.push(clump(leftS + crownWS * 0.06, topS + h * 0.13,
+                crownWS * 0.72, h * 0.2));
+            body.push(clump(leftS, midS + h * 0.02, crownWS, h * 0.22));
+            body.push(clump(leftS + crownWS * 0.13, midS + h * 0.21,
+                crownWS * 0.7, h * 0.15));
 
             var forkS = h * 0.6;
             bark.push([
@@ -464,12 +615,12 @@
          * and two asymmetric crowns. The rasterised details still vary with
          * the seeded generator, but these are the silhouettes the eye reads. */
         var shapes = [
-            { width: 0.82, top: 0.025, mid: 0.19, low: 0.36, lean: 0, fork: 0.57 },
-            { width: 0.72, top: 0.01, mid: 0.16, low: 0.32, lean: 0.04, fork: 0.55 },
-            { width: 0.9, top: 0.05, mid: 0.22, low: 0.39, lean: -0.03, fork: 0.6 },
-            { width: 0.8, top: 0.025, mid: 0.18, low: 0.35, lean: -0.07, fork: 0.56 },
-            { width: 0.84, top: 0.015, mid: 0.2, low: 0.34, lean: 0.06, fork: 0.58 },
-            { width: 0.88, top: 0.055, mid: 0.21, low: 0.37, lean: -0.01, fork: 0.59 }
+            { width: 0.74, top: 0.025, mid: 0.19, low: 0.41, lean: 0, fork: 0.57 },
+            { width: 0.66, top: 0.01, mid: 0.16, low: 0.37, lean: 0.04, fork: 0.55 },
+            { width: 0.8, top: 0.05, mid: 0.22, low: 0.44, lean: -0.03, fork: 0.6 },
+            { width: 0.72, top: 0.025, mid: 0.18, low: 0.4, lean: -0.07, fork: 0.56 },
+            { width: 0.76, top: 0.015, mid: 0.2, low: 0.39, lean: 0.06, fork: 0.58 },
+            { width: 0.79, top: 0.055, mid: 0.21, low: 0.42, lean: -0.01, fork: 0.59 }
         ];
         var shape = shapes[variant % shapes.length];
         var lean = shape.lean * w + (r() - 0.5) * w * 0.03;
@@ -482,18 +633,18 @@
         /* Broken, overlapping leaf masses. The exposed corners and unequal
          * lower lobes are intentional: the canopy should have places where
          * a branch could plausibly carry it. */
-        body.push(block(left + crownW * 0.17, top, crownW * 0.5, h * 0.15));
-        body.push(block(left + crownW * 0.52, top + h * 0.035, crownW * 0.3, h * 0.18));
-        body.push(block(left + crownW * 0.04, mid - h * 0.045, crownW * 0.55, h * 0.2));
-        body.push(block(left + crownW * 0.46, mid, crownW * 0.48, h * 0.21));
-        body.push(block(left, mid + h * 0.07, crownW * 0.36, h * 0.16));
-        body.push(block(left + crownW * 0.67, mid + h * 0.08, crownW * 0.31, h * 0.15));
-        body.push(block(left + crownW * 0.12, low, crownW * 0.34, h * 0.14));
-        body.push(block(left + crownW * 0.43, low + h * 0.015, crownW * 0.36, h * 0.15));
+        body.push(clump(left + crownW * 0.17, top, crownW * 0.5, h * 0.15));
+        body.push(clump(left + crownW * 0.52, top + h * 0.035, crownW * 0.3, h * 0.18));
+        body.push(clump(left + crownW * 0.04, mid - h * 0.045, crownW * 0.55, h * 0.2));
+        body.push(clump(left + crownW * 0.46, mid, crownW * 0.48, h * 0.21));
+        body.push(clump(left, mid + h * 0.07, crownW * 0.36, h * 0.16));
+        body.push(clump(left + crownW * 0.67, mid + h * 0.08, crownW * 0.31, h * 0.15));
+        body.push(clump(left + crownW * 0.12, low, crownW * 0.34, h * 0.14));
+        body.push(clump(left + crownW * 0.43, low + h * 0.015, crownW * 0.36, h * 0.15));
         if (variant % 2) {
-            body.push(block(left + crownW * 0.72, low + h * 0.03, crownW * 0.2, h * 0.1));
+            body.push(clump(left + crownW * 0.72, low + h * 0.03, crownW * 0.2, h * 0.1));
         } else {
-            body.push(block(left + crownW * 0.03, low + h * 0.025, crownW * 0.2, h * 0.1));
+            body.push(clump(left + crownW * 0.03, low + h * 0.025, crownW * 0.2, h * 0.1));
         }
 
         /* A thick trunk, two main forks, and a pair of smaller side limbs.
@@ -532,15 +683,17 @@
             target.fillStyle = "#000";
             for (var p = 0; p < list.length; p++) {
                 var q = list[p];
-                if (q[8] === 1) {
+                if (q[q.length - 1] === 1) {
                     target.fillRect(q[0], q[1], q[2] - q[0], q[5] - q[1]);
                     continue;
                 }
+                /* The last slot is the flag, so the polygon itself can be
+                 * any number of points: the canopy masses are beveled
+                 * octagons and the boughs are quads. */
+                var n = (q.length - 1) >> 1;
                 target.beginPath();
                 target.moveTo(q[0], q[1]);
-                target.lineTo(q[2], q[3]);
-                target.lineTo(q[4], q[5]);
-                target.lineTo(q[6], q[7]);
+                for (var v = 1; v < n; v++) target.lineTo(q[v * 2], q[v * 2 + 1]);
                 target.closePath();
                 target.fill();
             }
@@ -742,12 +895,17 @@
         /* Back to front, so the near trunks overlap the far ones. */
         trees.sort(function (a, b) { return a.foot - b.foot; });
 
-        /* Where the picture falls away into the page, kept below every trunk
-         * so the dissolve never has a tree to cut through. */
-        fadeRow = Math.round(ih * 0.875);
-        for (var ti = 0; ti < trees.length; ti++) {
-            var low = Math.round(trees[ti].foot) + 2;
-            if (low > fadeRow) fadeRow = low;
+        /* Where the picture falls away into the page, normally kept below
+         * every trunk so the dissolve never has a tree to cut through. A
+         * season with `fog` sets the edge itself instead, letting the veil
+         * climb into the treeline: the trunks then fade at the foot the
+         * same way everything else does, which is what fog looks like. */
+        fadeRow = Math.round(ih * (theme.fog || 0.875));
+        if (!theme.fog) {
+            for (var ti = 0; ti < trees.length; ti++) {
+                var low = Math.round(trees[ti].foot) + 2;
+                if (low > fadeRow) fadeRow = low;
+            }
         }
         if (fadeRow > ih - 6) fadeRow = ih - 6;
 
@@ -813,7 +971,13 @@
 
         function flakeColor(px, py, thrVal) {
             var tone = 1 - fadeAt(px, py);
-            return tone <= 0 ? 0 : shade(PAL, tone, thrVal);
+            if (tone <= 0) return 0;
+            /* A tinted season keeps its particles on a fixed band of their
+             * own ramp. Walking the main palette would make a petal as
+             * bright as the sky it falls across, which is why blossom gets
+             * its own blush ramp instead. */
+            if (parts.tint) return pick(parts.tint, 1.5 + tone, thrVal);
+            return shade(PAL, tone, thrVal);
         }
 
         for (var y = 0; y < ih; y++) {

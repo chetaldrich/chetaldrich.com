@@ -14,12 +14,12 @@
     {{ end }}
     <link rel="icon" type="image/png" href="{{ "/images/favicon.svg" | relURL }}">
     <script>
-        /* Resolve the season before the stylesheet paints, so autumn does
+        /* Resolve the season before the stylesheet paints, so spring does
          * not flash the winter colours on the way in. Keep this list in step
-         * with THEMES in js/autumn-ridge.js. Meteorological seasons: autumn
-         * is September through November, winter is December through
-         * February. Until spring and summer have their own scenes, they
-         * use the autumn palette and daylight. */
+         * with THEMES in js/autumn-ridge.js. Meteorological seasons: spring
+         * is March through May, autumn is September through November, winter
+         * is December through February. Summer has no scene yet, so it
+         * borrows autumn's palette and daylight. */
         (function () {
             var month = new Date().getMonth();
             var season;
@@ -27,11 +27,15 @@
                 season = "winter";
             } else if (month >= 8) {
                 season = "autumn";
+            } else if (month <= 4) {
+                season = "spring";
             } else {
                 season = "autumn";
             }
             var forced = new URLSearchParams(location.search).get("season");
-            if (forced === "winter" || forced === "autumn") season = forced;
+            if (forced === "winter" || forced === "autumn" || forced === "spring") {
+                season = forced;
+            }
             document.documentElement.setAttribute("data-season", season);
         })();
     </script>

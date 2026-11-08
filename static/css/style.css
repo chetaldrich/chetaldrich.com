@@ -3,10 +3,11 @@
  *
  * One-bit theme: two inks and a page, with ordered-dither fills standing
  * in for the grey values. The page colour is seasonal: blue hour in
- * winter, golden hour in autumn. The scene canvas paints the same two
- * colours, and the foot of the picture dissolves into whichever page is
- * behind it. `data-season` is set by an inline script in baseof.html
- * before this stylesheet loads, so there is no flash of the wrong page.
+ * winter, dawn in spring, golden hour in autumn. The scene canvas paints
+ * the same two colours, and the foot of the picture dissolves into
+ * whichever page is behind it. `data-season` is set by an inline script in
+ * baseof.html before this stylesheet loads, so there is no flash of the
+ * wrong page.
  * ------------------------------------------------------------------ */
 
 :root {
@@ -54,6 +55,23 @@ html[data-season="autumn"] {
     --hero-1: #181929;
     --hero-2: #9c6250;
     --hero-3: #f5edda;
+}
+
+/* Dawn. Pale paper with a green cast — the colour of the grass the fog is
+ * sitting on, and SPRING_RGB[7] in the scene script — with a green-black
+ * ink. Cool where autumn is warm, so the two light seasons still read as
+ * different hours. */
+html[data-season="spring"] {
+    color-scheme: light;
+    --ink: #1b241e;
+    --void: #e9f0de;
+    --dither: rgba(70, 92, 74, 0.45);
+    --dim: rgba(48, 64, 52, 0.68);
+    --hover: #0b120e;
+    --rule: rgba(27, 36, 30, 0.22);
+    --hero-1: #161e2c;
+    --hero-2: #969e98;
+    --hero-3: #e9f0de;
 }
 
 * {
